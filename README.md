@@ -1,6 +1,6 @@
 # Archive Lens
 ## Pitch
-Just like me, you probably have a box of old letters and journals from your great grandpa, and you really don't want to throw it away but you don't know what to do with it? Store, view, and organize your family history memories in one place: Archive Lens. Users can easily upload documents such as journal pages or letters, then add metadata such as author(s), dates, and tags to easily find your documents later. Share your documents with other users, or even give them permission to contribute metadata or comments. 
+Just like me, you probably have a box of old letters and journals from your great grandpa, and you really don't want to throw it away. What are you even supposed to do with these letters? Store, view, and organize your family history memories in one place: Archive Lens. Users can easily upload documents such as journal pages or letters, then add metadata such as author(s), dates, and tags to easily find your documents later. Share your documents with other users, or even give them permission to contribute metadata or comments. Bonus feature: learn about historical events that happened around the same time that a document was written (found using a historical data API).
 ## Design
 
 The main page will look a bit like this:
