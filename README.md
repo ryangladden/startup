@@ -17,7 +17,7 @@ And viewing a document will go to a new page with more information and a documen
 * Quickly find documents by author(s), date, or tag
 * Filter permissions so that other users can (or can't) view, comment, or contribute
 * Chat with other users to collaborate about a document or document author
-* Disocver what was happening in history on the same day a memory a journal entry or letter was written
+* Discover what was happening in history on the same day a memory a journal entry or letter was written
 ## Technologies
 Archive Lens will use the following technologies:
 * **HTML:** An HTML page for logging in, an HTML page for viewing all your documents, and an HTML page for viewing a single documents and its metadata and comments.
