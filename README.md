@@ -2,6 +2,20 @@
 ## Pitch
 Just like me, you probably have a box of old letters and journals from your great grandpa, and you really don't want to throw it away but you don't know what to do with it? Store, view, and organize your family history memories in one place: Archive Lens. Users can easily upload documents such as journal pages or letters, then add metadata such as author(s), dates, and tags to easily find your documents later. Share your documents with other users, or even give them permission to contribute metadata or comments. 
 ## Design
+The main page will look a bit like this:
+
+<img src="readme-images/mainpage_design.png">
+And document quick view will display a small overlay using React that looks something like this:
+
+
+<img src="readme-images/quickview_design.png" height=200>
+
+And viewing a document will go to a new page with more information and a document viewer that probably looks a little like this:
+
+<img src="readme-images/readerview_design.png">
+
+
+
 
 ## Key Features
 * Easily review and read uploaded documents
@@ -20,4 +34,3 @@ Archive Lens will use the following technologies:
   * Sharing documents and/or editing permissions
 * **DB:** Stores account information, documents and metadata
 * **WebSockets:** Provides real-time chat information (other user is typing) and instantly displays messages and other notifications.
-* 
