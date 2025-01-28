@@ -32,3 +32,24 @@ Archive Lens will use the following technologies:
   * Adding comments or changes to a document
 * **DB:** Stores account information, documents and metadata
 * **WebSockets:** Provides real-time chat information (other user is typing) and instantly displays messages and other notifications.
+
+## HTML Deliverable
+
+The structure of the webpages builting using HTML.
+
+ [x] **HTML pages:** A login page, an account creation page, a document viewer page, a document list page, and a share page.
+ 
+ [x] **Links:** - All pages are linked in the navigation seciton.
+    * All documents link to the document viewer
+    * Authors link to the document list. Eventually they will link to a list of documents written by that author
+    * All footers contain a link to the GitHub page
+
+ [x] **Text:** Includes list items in navigation and document metadata. Paragraph text on about page. 
+
+ [x] **Input/Interaction:** Lots of buttons! Lots of forms! Form for account creation, form for login. Submit buttons, back buttons, buttons, buttons!
+
+ [x] **Images:** Document list includes document images. Footer contains GitHub SVG. Favicon on all pages. Document viewer includes document image. 
+
+ [x] **DB/Login:** Input box and submit button for login. Document list is a dynamic list pulled from the database. Search results also pulled from database. Document viewer will pull document metadata from DB.
+
+ [x] **WebSocket:** Search function will pull DB search results live on page. Sharing page will include live activity in messages section. 
