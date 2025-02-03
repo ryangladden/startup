@@ -1,76 +1,89 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Archive Lens</title>
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-    </head>
-    <body>
-        <header>
-            <a href="docs.html"><img src="images/logo.webp" width="60"></a>
-            <h1>Archive Lens</h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Login</a></li>
-                    <li><a href="docs.html">Documents</a></li>
-                    <li><a href="sharing.html">Sharing</a></li>
-                    <li><a href="about.html">About</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-           <span>
-            <button>
-                <-Return to list
-            </button>
-            <div id="viewer">
-                <p>Document loaded here</p>
-                <img src="./images/letter.png">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Archive Lens</title>
+            <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+            <link href="https://getbootstrap.com/docs/5.1/assets/css/docs.css" rel="stylesheet">
+            <link href="index.css" rel="stylesheet">
+        </head>
+        <body>
+            <header class="sticky-top bg-blue">
+                <!-- <a href="docs.html"><img src="images/logo.webp" width="60"></a> -->
+                <nav role="navigation" class="navbar navbar-light">
+                    <a href="docs.html" class="navbar-brand">
+                        <img src="images/logo.webp" width="20">
+                        Archive Lens
+                    </a>
+                    <ul class="navbar-nav flex-row">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="index.html">Login</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="docs.html">Documents</a></li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="sharing.html">Sharing</a></li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="about.html">About</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+            <span id="return">
+                <button class="btn">
+                    Return to list
+                </button>
+            </span>
+                <div id="doc-data">
+                <section id="viewer">
+                    <p>Document loaded here</p>
+                    <img src="./images/letter.png">
+                </section>
+                <section id="metadata">
+                    <h2>Document title</h2>
+                    <h3>(Document type)</h3>
+                    <ul>
+                        <li><img src="./images/calendar.png" width="30"><p>Document date</p></li>
+                        <li><img src="./images/map.png" width="30"><p>Location</p></li>
+                    </ul>
+                    <h4>People</h4>
+                    <ul>
+                        <li>Author(s): <a href= docs.html>Joe Mama</a></li>
+                        <li>Mentioned: <a href= docs.html>Joe Mama's Mama</a></li>
+                    </ul>
+                    <h4>Tags</h4>
+                    <ul>
+                        <li><button>tag1</button></li>
+                        <li><button>mission letter</button></li>
+                        <li><button>tag3</button></li>
+                    </ul>
+                    <div>
+                        <p>"in history" external API call</p>
+                    </div>
+                    <div id="activity">
+                        <h4>Activity</h4>
+                        <div>
+                            <h5><a href="sharing.html">Joe Mama Collaborator</a></h5>
+                            <p>date</p>
+                            <p>Joe Mama Collaborator added tag "mission letter"</p>
+                        </div>
+                        <div>
+                            <h5><a href="sharing.html">Jimmy John</a></h5>
+                            <p>date</p>
+                            <p>Jimmy John shared this document with you</p>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <aside id="metadata">
-                <h2>Document title</h2>
-                <h3>(Document type)</h3>
-                <ul>
-                    <li><img src="./images/calendar.png" width="30"><p>Document date</p></li>
-                    <li><img src="./images/map.png" width="30"><p>Location</p></li>
-                </ul>
-                <h4>People</h4>
-                <ul>
-                    <li>Author(s): <a href= docs.html>Joe Mama</a></li>
-                    <li>Mentioned: <a href= docs.html>Joe Mama's Mama</a></li>
-                </ul>
-                <h4>Tags</h4>
-                <ul>
-                    <li><button>tag1</button></li>
-                    <li><button>mission letter</button></li>
-                    <li><button>tag3</button></li>
-                </ul>
+            </main>
+            <footer class="sticky-bottom bg-white">
                 <div>
-                    <p>"in history" external API call</p>
+                    <a href="https://github.com/ryangladden/startup"  target="_blank">
+                        <img src="images/github-mark.svg" height="30">
+                        <p>Find Archive Lens on GitHub</p>
+                    </a>
+                    <p>Favicon and logo produced by DALL-E</p>
                 </div>
-                <div id="activity">
-                    <h4>Activity</h4>
-                    <section>
-                        <h5><a href="sharing.html">Joe Mama Collaborator</a></h5>
-                        <p>date</p>
-                        <p>Joe Mama Collaborator added tag "mission letter"</p>
-                    </section>
-                    <section>
-                        <h5><a href="sharing.html">Jimmy John</a></h5>
-                        <p>date</p>
-                        <p>Jimmy John shared this document with you</p>
-                    </section>
-                </div>
-            </aside>
-           </span>
-        </main>
-        <footer>
-            <div>
-                <a href="https://github.com/ryangladden/startup"  target="_blank">
-                    <img src="images/github-mark.svg" height="30">
-                    <p>Find Archive Lens on GitHub</p>
-                </a>
-                <p>Favicon and logo produced by DALL-E</p>
-            </div>
-        </footer>
-    </body>
-</html>
+            </footer>
+        </body>
+    </html>

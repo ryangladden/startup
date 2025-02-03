@@ -1,0 +1,41 @@
+main {
+    flex: 1 calc(100vh-110px);
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    flex: 0 80px;
+}
+
+.navbar-brand {
+    display: flex;
+    flex: 0;
+    align-items: center;
+    padding-left: 10px;
+}
+
+nav {
+    align-items: center;
+}
+
+menu {
+    display: flex;
+    flex: 1;
+    flex-direction: row !important;
+    list-style: none;
+    margin-left: auto;
+}
+
+menu .nav-item {
+    padding-left: 1em;
+}
+
+footer {
+    flex: 2
+}
