@@ -30,7 +30,7 @@ main {
 }
 
 .card {
-    width: 18rem;
+    margin: 15px;
 }
 
 .card-img-top {

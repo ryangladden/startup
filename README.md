@@ -75,3 +75,5 @@ The structure of the webpages builting using HTML.
 [x] **Text content:** Text in correct places, stylized, and sized. Places for text to be generated from database. 
 
 [x] **Application elements:** PDF-viewer sized and has its own scroll bar. Document list is in a grid. 
+
+**PLEASE NOTE:** There is another page that is NOT accessed through the navigation bar but instead by clicking on any of the cards found on the "Documents" tab. This included some extensive work that is really integral to my application. 
