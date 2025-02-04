@@ -88,8 +88,9 @@ button {
   }
 
 .welcome {
-    margin: 0 auto;
-    padding: 0 auto;
+    /* margin: 0 auto;
+    padding: 0 auto; */
+    text-align: center;
   }
 
 .logo {
@@ -99,10 +100,16 @@ button {
     font-size: 100;
   }
 
+  h2 {
+    font-size: 50pt;
+  }
+
 .typing {
+    display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    animation: typing 3s steps(20, end) forwards
+    animation: typing 5s steps(10, end) forwards, cursor .5s 14;
+    width: 0;
 }
 
 
@@ -114,13 +121,22 @@ button {
         width: 50%
     }
     50% {
-        width: 40%
+        width: 30%
     }
     65% {
-        width: 40%
+        width: 30%
     }
     to {
         width: 100%
+    }
+}
+
+@keyframes cursor {
+    from {
+        border-right: 2px solid black;
+    }
+    to {
+        bord-right-color: transparent
     }
 }
 
