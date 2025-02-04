@@ -53,3 +53,25 @@ The structure of the webpages builting using HTML.
  [x] **DB/Login:** Input box and submit button for login. Document list is a dynamic list pulled from the database. Search results also pulled from database. Document viewer will pull document metadata from DB.
 
  [x] **WebSocket:** Search function will pull DB search results live on page. Sharing page will include live activity in messages section. 
+
+## CSS Deliverable
+[x] **Header, footer, main content body:**
+  * Header stays up top and doesn't resize
+  * Main content fills the page and doesn't overflow.
+
+[x] **Navigation elements:** Navigation elements use bootstrap and look pretty. `.navbar-brand` was used to make my app logo look pretty.
+
+[x] **Responsive to window sizing:** 
+* Grid elements wrap to the next line. 
+* Large lists that are too big for the screen have their own scrollbar. 
+* Sidebars that are too large for mobile are either removed, or sidebar is moved below the principal content.
+
+[x] **Animation:** Welcome page has a cool animation. I'm still working out the bugs.
+
+[x] **CSS Frameworks:** Main content list uses bootstrap cards. Login forms use bootstrap as well. 
+
+[x] **Images and media:** Sized properly to not look goofy. When necessary, added overflow scroll. 
+
+[x] **Text content:** Text in correct places, stylized, and sized. Places for text to be generated from database. 
+
+[x] **Application elements:** PDF-viewer sized and has its own scroll bar. Document list is in a grid. 

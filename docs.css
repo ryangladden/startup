@@ -7,6 +7,10 @@ main {
     flex: 0 80px;
 }
 
+.search-input {
+    width: 400px;
+}
+
 .container-fluid {
     display: flex;
     flex-direction: row;
@@ -17,14 +21,12 @@ main {
     flex: 0 250px;
 }
 
-.doc-list {
-    flex: 1;
-    overflow-y: auto;
-}
-
 .card-deck {
     overflow: auto;
     flex: 1;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
 }
 
 .card {
@@ -35,4 +37,10 @@ main {
     object-fit: cover;
     height: 180px;
     width: 100%;
+}
+
+@media (max-width: 700px) {
+    .filter, footer {
+        display: none;
+    }
 }

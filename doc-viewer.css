@@ -1,0 +1,26 @@
+main {
+    height: 100vh;
+    overflow:hidden
+}
+
+.doc-data {
+    display: flex;
+    flex-direction: row;
+}
+
+.viewer {
+    flex: 1;
+    height: 100vh;
+    overflow: auto;
+}
+
+.metadata {
+    flex: 0 500px;
+    padding: 20pt;
+}
+
+@media (max-width: 700px) {
+    .doc-data {
+        flex-direction:column;
+    }
+}
