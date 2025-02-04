@@ -1,0 +1,136 @@
+                 <!-- <div class="card">
+                        <img src="images/letter.png" class="card-img-top img-cover">
+                        <div class="card-body">
+                        <h4 class="card-title">Document1</h4>
+                        <h5 class="card-subtitle">Document type</h5>
+                        <ul>
+                            <li><a>Author</a></li>
+                            <li>Date</li>
+                            <li>Location</li>
+                        </ul>
+                        <button>Quick View</button>
+                        <button>Open</button>
+                        <button>Share</button>
+                    </div>
+                    </div> -->
+                    <!-- <div class="card">
+                        <a href="doc-viewer.html">
+                        <h4>Document2</h4>
+                        <img src="images/letter2.png" width=100>
+                        <ul>
+                            <li>Letter</li>
+                            <li>Author: <a>Grandpa Larry</a></li>
+                            <li>6 June 1966</li>
+                            <li>Boston, MA</li>
+                        </ul>
+                        <button>Quick View</button>
+                        <button>Open</button>
+                        <button>Share</button>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <a href="doc-viewer.html">
+                        <h4>Document3</h4>
+                        <img src="images/journal.png" width=100>
+                        <ul>
+                            <li>Journal Entry</li>
+                            <li>Author<a>Grandma Sharon</a></li>
+                            <li>17 August 2001</li>
+                            <li>Jackson, MS</li>
+                        </ul>
+                        <button>Quick View</button>
+                        <button>Open</button>
+                        <button>Share</button>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="doc-viewer.html">
+                    <h4>Document1</h4>
+                    <img src="images/letter.png" width=100>
+                    <ul>
+                        <li>Document type</li>
+                        <li><a>Author</a></li>
+                        <li>Date</li>
+                        <li>Location</li>
+                    </ul>
+                    <button>Quick View</button>
+                    <button>Open</button>
+                    <button>Share</button>
+                </a>
+                </div>
+                <div class="card">
+                    <a href="doc-viewer.html">
+                    <h4>Document2</h4>
+                    <img src="images/letter2.png" width=100>
+                    <ul>
+                        <li>Letter</li>
+                        <li>Author: <a>Grandpa Larry</a></li>
+                        <li>6 June 1966</li>
+                        <li>Boston, MA</li>
+                    </ul>
+                    <button>Quick View</button>
+                    <button>Open</button>
+                    <button>Share</button>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="doc-viewer.html">
+                    <h4>Document3</h4>
+                    <img src="images/journal.png" width=100>
+                    <ul>
+                        <li>Journal Entry</li>
+                        <li>Author<a>Grandma Sharon</a></li>
+                        <li>17 August 2001</li>
+                        <li>Jackson, MS</li>
+                    </ul>
+                    <button>Quick View</button>
+                    <button>Open</button>
+                    <button>Share</button>
+                </a>
+            </div>
+            <div class="card">
+                <a href="doc-viewer.html">
+                <h4>Document1</h4>
+                <img src="images/letter.png" width=100>
+                <ul>
+                    <li>Document type</li>
+                    <li><a>Author</a></li>
+                    <li>Date</li>
+                    <li>Location</li>
+                </ul>
+                <button>Quick View</button>
+                <button>Open</button>
+                <button>Share</button>
+            </a>
+            </div>
+            <div class="card">
+                <a href="doc-viewer.html">
+                <h4>Document2</h4>
+                <img src="images/letter2.png" width=100>
+                <ul>
+                    <li>Letter</li>
+                    <li>Author: <a>Grandpa Larry</a></li>
+                    <li>6 June 1966</li>
+                    <li>Boston, MA</li>
+                </ul>
+                <button>Quick View</button>
+                <button>Open</button>
+                <button>Share</button>
+                </a>
+            </div>
+            <div class="card">
+                <a href="doc-viewer.html">
+                <h4>Document3</h4>
+                <img src="images/journal.png" width=100>
+                <ul>
+                    <li>Journal Entry</li>
+                    <li>Author<a>Grandma Sharon</a></li>
+                    <li>17 August 2001</li>
+                    <li>Jackson, MS</li>
+                </ul>
+                <button>Quick View</button>
+                <button>Open</button>
+                <button>Share</button>
+            </a>
+        </div>
+        </div> -->

@@ -1,0 +1,38 @@
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.doc-list-header {
+    flex: 0 80px;
+}
+
+.container-fluid {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+}
+
+.filter {
+    flex: 0 250px;
+}
+
+.doc-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.card-deck {
+    overflow: auto;
+    flex: 1;
+}
+
+.card {
+    width: 18rem;
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 180px;
+    width: 100%;
+}
