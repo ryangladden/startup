@@ -11,6 +11,7 @@ main {
     overflow: auto;
     margin: 0 auto;
     height: 100%;
+    align-items: center;
 
 }
 
@@ -65,11 +66,13 @@ footer {
     flex-shrink: 0;
     margin: 0;
     background-color: #f47a00;
+    font-color: white;
 }
 
 .login {
     width: 300px;
-    justify-content: space-around;
+    /* justify-content: center; */
+    align-items: center;
 
 }
 
@@ -77,20 +80,17 @@ footer {
     padding: 10px 10px 10px 10px;
 }
 
-button {
-    margin: 0 auto;
+.form-actions {
+    align-self: center;
+    display: inline-flex;
+    gap: 10px;
 }
-
-.bad-script-regular {
-    font-family: "Bad Script", serif;
-    font-weight: 400;
-    font-style: normal;
-  }
 
 .welcome {
     /* margin: 0 auto;
     padding: 0 auto; */
     text-align: center;
+    max-width: max-content;
   }
 
 .logo {
@@ -101,33 +101,33 @@ button {
   }
 
   h2 {
-    font-size: 50pt;
+    font-size: 40pt;
   }
 
 .typing {
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    animation: typing 5s steps(10, end) forwards, cursor .5s 14;
-    width: 0;
+    border-right: 2px solid transparent;
+    animation: typing 4s steps(10, end) forwards, cursor .5s 14;
 }
 
 
 @keyframes typing {
     from {
-        width: 0%
+        width: 0ch
     }
     40% {
-        width: 50%
+        width: 7ch
     }
     50% {
-        width: 30%
+        width: 7ch
     }
     65% {
-        width: 30%
+        width: 4ch
     }
     to {
-        width: 100%
+        width: 13ch
     }
 }
 
@@ -136,7 +136,7 @@ button {
         border-right: 2px solid black;
     }
     to {
-        bord-right-color: transparent
+        border-right: 2px solid transparent;
     }
 }
 
