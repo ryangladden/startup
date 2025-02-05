@@ -55,6 +55,10 @@ The structure of the webpages builting using HTML.
  [x] **WebSocket:** Search function will pull DB search results live on page. Sharing page will include live activity in messages section. 
 
 ## CSS Deliverable
+
+**TAs PLEASE NOTE:** There is another page that is NOT accessed through the navigation bar but instead by clicking on any of the cards found on the "Documents" tab. This included some extensive work that is really integral to my application. 
+
+
 [x] **Header, footer, main content body:**
   * Header stays up top and doesn't resize
   * Main content fills the page and doesn't overflow.
@@ -76,4 +80,4 @@ The structure of the webpages builting using HTML.
 
 [x] **Application elements:** PDF-viewer sized and has its own scroll bar. Document list is in a grid. 
 
-**PLEASE NOTE:** There is another page that is NOT accessed through the navigation bar but instead by clicking on any of the cards found on the "Documents" tab. This included some extensive work that is really integral to my application. 
+**TAs PLEASE NOTE:** There is another page that is NOT accessed through the navigation bar but instead by clicking on any of the cards found on the "Documents" tab. This included some extensive work that is really integral to my application. 
