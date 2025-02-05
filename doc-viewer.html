@@ -27,51 +27,55 @@
     </header>
     <main>
         <span id="return">
-            <button class="btn">
+            <button class="btn btn-primary">
                 Return to list
             </button>
         </span>
         <div class="doc-data">
             <div class="viewer">
-                <p>Document loaded here</p>
-                <iframe type="pdf" src="images/letter.png" width="800" height="100%"></iframe>
+                <iframe type="pdf" src="images/example.pdf" width="95%" height="87%"></iframe>
             </div>
-            <div class="metadata">
-                <h2>Document title</h2>
-                <h3>(Document type)</h3>
-                <div class="date">
-                    <img src="./images/calendar.svg" width="30">
-                    <p>Document date</p>
+            <div class="sidebar">
+                <div class="doc-title">
+                    <h2>Old Letter to Joe</h2>
+                    <h3>Letter</h3>
                 </div>
-                <div class="location">
-                    <img src="./images/map.svg" width="30">
-                    <p>Location</p>
+                <div class="metadata">
+                    <div class="date">
+                        <img src="./images/calendar.svg" width="30">
+                        <p>5 April 2001</p>
+                    </div>
+                    <div class="date">
+                        <img src="./images/map.svg" width="30">
+                        <p>Ibisa, Spain</p>
+                    </div>
+                    <div class="people">
+                        <h4>People</h4>
+                        <p>Author(s): Joe Mama</p>
+                        <p>Mentioned: Joe Mama's Mama</p>
+                    </div>
+                    <div class="tags">
+                        <h4>Tags</h4>
+                            <button class="btn btn-secondary">tag1</button>
+                            <button class="btn btn-secondary">mission letter</button>
+                            <button class="btn btn-secondary">tag3</button>
+                    </div>
+                    <div class="in-history card card-body">
+                        <h5 class="card-title">In History:</h5>
+                        <p class="card-text">"in history" external API call</p>
+                    </div>
                 </div>
-                <h4>People</h4>
-                <ul>
-                    <li>Author(s): <a href=docs.html>Joe Mama</a></li>
-                    <li>Mentioned: <a href=docs.html>Joe Mama's Mama</a></li>
-                </ul>
-                <h4>Tags</h4>
-                <ul>
-                    <li><button>tag1</button></li>
-                    <li><button>mission letter</button></li>
-                    <li><button>tag3</button></li>
-                </ul>
-                <div>
-                    <p>"in history" external API call</p>
-                </div>
-                <div id="activity">
+                <div class="activity">
                     <h4>Activity</h4>
-                    <div>
-                        <h5><a href="sharing.html">Joe Mama Collaborator</a></h5>
-                        <p>date</p>
+                    <div class="card card-body">
+                        <h5 class="card-title"><a href="sharing.html">Joe Mama Collaborator</a></h5>
+                        <p class="card-text text-muted">1 Feb 2025</p>
                         <p>Joe Mama Collaborator added tag "mission letter"</p>
                     </div>
-                    <div>
-                        <h5><a href="sharing.html">Jimmy John</a></h5>
-                        <p>date</p>
-                        <p>Jimmy John shared this document with you</p>
+                    <div class="card card-body">
+                        <h5 class="card-title"><a href="sharing.html">Joe Mama Collaborator</a></h5>
+                        <p class="card-text text-muted">27 Jan 2025</p>
+                        <p class="card-text">shared this document with you"</p>
                     </div>
                 </div>
             </div>
