@@ -1,0 +1,32 @@
+{
+  "name": "startup",
+  "version": "1.0.0",
+  "description": "Just like me, you probably have a box of old letters and journals from your great grandpa, and you really don't want to throw it away. What are you even supposed to do with these letters? Store, view, and organize your family history memories in one place: Archive Lens. Users can easily upload documents such as journal pages or letters, then add metadata such as author(s), dates, and tags to easily find your documents later. Share your documents with other users, or even give them permission to contribute metadata or comments. Bonus feature: learn about historical events that happened around the same time that a document was written (found using a historical data API). ## Design",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryangladden/startup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryangladden/startup/issues"
+  },
+  "homepage": "https://github.com/ryangladden/startup#readme",
+  "devDependencies": {
+    "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.5"
+  }
+}
