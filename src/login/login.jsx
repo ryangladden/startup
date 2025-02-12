@@ -3,7 +3,7 @@ import "./login.css";
 
 export function Login() {
   return (
-    <main className='container-fluid bg-secondary text-center'>
+    <main>
             <section className="welcome">
                 <h2>Welcome to</h2>
                 <h2 className="logo typing" >Archive Lens</h2>
