@@ -23,13 +23,14 @@ export default function App() {
                 </menu>
             </nav>
         </header>
+        <div>
         <Routes>
             <Route path='/' element={<Login />} exact />
             <Route path='/docs' element={<DocList />} />
             <Route path='/about' element={<About />} />
             <Route path='/Sharing' element={<Sharing />} />
-            <Route path='*' element={<NotFound />} />
         </Routes>
+        </div>
         <footer class="container-fluid sticky-bottom">
         <div>
             <a to="https://github.com/ryangladden/startup" target="_blank">
