@@ -9,16 +9,15 @@ main {
     flex-direction: column;
     /* overflow: auto; */
     margin: 0;
-    height: 100vh;
+    height: calc(100vh - 160px);
 }
 
 .body {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
     margin: 0;
     background-image: linear-gradient(#64dbc9, white);
-    color: black !important;
     /* overflow: hidden !important; */
 }
 
@@ -84,10 +83,10 @@ footer {
     gap: 10px;
 }
 
-.welcome {
+/* .welcome {
     text-align: center;
     max-width: max-content;
-  }
+  } */
 
 .logo {
     font-family: monospace;

@@ -11,10 +11,10 @@ import { Sharing } from './sharing/sharing';
 export default function App() {
     return (
     <BrowserRouter>
-      <div className='body bg-dark text-light'>
+      <div className='body'>
         <header className="sticky-top container-fluid">
             <nav className="navbar">
-                <img src="/logo-colorful.webp" width='50' className="logo"/><p to="docs" className="navbar-brand logo">rchive Lens</p>
+                <NavLink to="docs" className="navbar-brand logo"><img src="/logo-colorful.webp" width='50' className="logo"/>rchive Lens</NavLink>
                 <menu className="navbar-nav">
                     <li className="nav-item"><NavLink className="nav-link" to="">Login</NavLink></li>
                     <li className="nav-item"><NavLink className="nav-link" to="docs">Documents</NavLink></li>
@@ -29,9 +29,10 @@ export default function App() {
             <Route path='/docs' element={<DocList />} />
             <Route path='/about' element={<About />} />
             <Route path='/sharing' element={<Sharing />} />
+            <Route path='/doc-viewer' element={<DocViewer />} />
         </Routes>
         </div>
-        <footer className="container-fluid sticky-bottom">
+        <footer className="container-fluid ">
         <div>
             <a href="https://github.com/ryangladden/startup" target="_blank">
                 <img src="github-mark.svg" height="30"/>Find Archive Lens on GitHub</a>

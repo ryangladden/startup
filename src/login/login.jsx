@@ -4,12 +4,12 @@ import "./login.css";
 export function Login() {
   return (
     <main>
-            <section className="welcome">
+            <div className="welcome">
                 <h2>Welcome to</h2>
                 <h2 className="logo typing" >Archive Lens</h2>
                 <p>Your archive for letters, journals, and other family history documents</p>
-            </section>
-            <section className="login">
+            </div>
+            <div className="login">
             <form id="login" className="form-group" method="get" action="docs.html">
                 <h3>Log in to share documents</h3>
                 <div className="email input-group">
@@ -25,7 +25,7 @@ export function Login() {
                     <a href="create-account.html" className="btn btn-secondary">New? Create an account</a>
                 </div>
             </form>
-        </section>
+        </div>
     </main>
   );
 }
