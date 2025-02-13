@@ -76,3 +76,16 @@ The structure of the webpages builting using HTML.
 [x] **Text content:** Text in correct places, stylized, and sized. Places for text to be generated from database. 
 
 [x] **Application elements:** PDF-viewer sized and has its own scroll bar. Document list is in a grid. 
+
+
+## React Deliverable Phase 1
+
+[x] Bundled and transpiled using Vite
+[x] HTML pages ported to React components:
+* login
+* document list
+* document viewer (NOT found on the navigation tab: click one of the documents to see this page)
+* sharing page
+* about page
+[x] All pages are routed on the main App. 
+
