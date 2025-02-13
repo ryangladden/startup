@@ -1,5 +1,6 @@
 import React from 'react';
-import './doc_viewer.css'
+import './doc_viewer.css';
+import Card from 'react-bootstrap/Card';
 
 export function DocViewer() {
   return (
@@ -9,9 +10,9 @@ export function DocViewer() {
                 Return to list
             </button>
         </span>
-        <div className="doc-data">
+        <div className="doc-data container-fluid">
             <div className="viewer">
-                <iframe type="pdf" src="example.pdf" width="95%" height="87%"></iframe>
+                <iframe type="pdf" src="example.pdf" width="95%" height="95%"></iframe>
             </div>
             <div className="sidebar">
                 <div className="doc-title">
@@ -20,11 +21,11 @@ export function DocViewer() {
                 </div>
                 <div className="metadata">
                     <div className="date">
-                        <img src="./images/calendar.svg" width="30"/>
+                        <img src="calendar.svg" width="30"/>
                         <p>5 April 2001</p>
                     </div>
                     <div className="date">
-                        <img src="./images/map.svg" width="30"/>
+                        <img src="map.svg" width="30"/>
                         <p>Ibisa, Spain</p>
                     </div>
                     <div className="people">
@@ -39,6 +40,9 @@ export function DocViewer() {
                             <button className="btn btn-secondary">tag3</button>
                     </div>
                     <div className="in-history card card-body">
+                      <Card>
+                        <Card.Title>In History</Card.Title>
+                      </Card>
                         <h5 className="card-title">In History:</h5>
                         <p className="card-text">"in history" external API call</p>
                     </div>

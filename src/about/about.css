@@ -1,8 +1,11 @@
 main {
-    max-width: 700px;
     padding: 20px
 }
 
 h2 {
     font-size: xx-large;
+}
+
+.about {
+    width: 700px;
 }

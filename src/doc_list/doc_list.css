@@ -22,22 +22,23 @@ main {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 300px);
 }
 
 .doc-list-cards {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     max-height: 100%;
 }
 
 .doc-list-filter {
     flex: 0 250px;
 }
-
-h3 {
+/* 
+h3. {
     padding-left: 200px;
-}
+} */
 
 @media (max-width: 700px) {
     .doc-list-filter, footer {

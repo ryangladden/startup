@@ -1,28 +1,31 @@
-main {
-    height: 100vh;
+/* main {
     overflow:hidden
 }
 
 .doc-data {
     display: flex;
     flex-direction: row;
+    flex: 1;
 }
 
 .viewer {
     flex: 1;
-    height: 100vh;
+    height: 100%;
     overflow: auto;
     padding: 5vh;
 }
 
 .sidebar {
-    flex: 0 500px;
+    flex: 0 400px;
     padding: 20pt;
+    display: flex;
+    flex-direction: column;
 }
 
 .metadata {
     display: flex;
     flex-direction: column;
+    flex: 0;
 }
 
 .date {
@@ -40,6 +43,11 @@ p {
 
 .doc-title {
     margin-bottom: 20px;
+    text-align: left;
+}
+
+h2 {
+    font-size: medium;
 }
 
 h2, h3 {
@@ -58,5 +66,106 @@ h4 {
 @media (max-width: 700px) {
     .doc-data {
         flex-direction:column;
+        overflow-y: auto;
+    }
+
+    .viewer {
+        height: 700px;
+    }
+} */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100vh; /* Ensures full screen height */
+    overflow: hidden; /* Prevents full-page scrolling */
+}
+
+.doc-data {
+    display: flex;
+    flex: 1;
+    overflow: hidden; /* Prevents unnecessary scrolling */
+}
+
+.viewer {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto; /* Allows scrolling only in viewer */
+    padding: 5vh;
+}
+
+.sidebar {
+    flex: 0 0 350px; /* Fixed width, doesn't stretch */
+    padding: 20pt;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Sidebar itself doesn’t scroll */
+}
+
+.metadata {
+    flex: 0; /* Metadata doesn’t grow */
+}
+
+.activity {
+    flex: 1; /* Takes remaining space */
+    max-height: 50vh; /* Prevents it from expanding too much */
+    overflow-y: auto; /* This is the only section that scrolls */
+}
+
+.date {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 20px;
+}
+
+p {
+    margin: 0;
+    font-size: 15pt;
+}
+
+.doc-title {
+    margin-bottom: 20px;
+}
+h2 {
+    font-size: xx-large
+}
+h3 {
+    font-size: large;
+
+}
+
+h2, h3 {
+    margin-bottom: 0;
+}
+
+h4 {
+    margin-top: 18px;
+}
+
+.in-history {
+    margin: 20px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 700px) {
+    .doc-data {
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .viewer {
+        height: calc(100vh - 80px);
+    }
+
+    .sidebar {
+        flex: 1;
+        width: 100%;
     }
 }
