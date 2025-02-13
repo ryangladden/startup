@@ -1,7 +1,8 @@
 main {
     display: flex;
     flex-direction: column;
-    height: 100%
+    overflow: hidden;
+    max-height: calc(100vh - 160px);
 }
 
 .doc-list-header {
@@ -20,12 +21,14 @@ main {
     flex: 1;
     display: flex;
     flex-direction: row;
-    height: 100%;
+    overflow: hidden;
+    max-height: calc(100vh - 80px);
 }
 
 .doc-list-cards {
     flex: 1;
-    overflow:scroll;
+    overflow-y: auto;
+    max-height: 100%;
 }
 
 .doc-list-filter {
@@ -36,12 +39,8 @@ h3 {
     padding-left: 200px;
 }
 
-.filter {
-    flex: 0 250px;
-}
-
 @media (max-width: 700px) {
-    .filter, footer {
+    .doc-list-filter, footer {
         display: none;
     }
 }

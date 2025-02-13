@@ -7,7 +7,7 @@ import './doc_list.css'
 
 export function DocList() {
     return (
-        <main>
+        <main className='container-fluid'>
             <div className="doc-list-header">
                 <h3>Username's Documents</h3>
                 <input type="text" className="form-control search-input" placeholder="search by author, document type, date..." />
@@ -18,7 +18,7 @@ export function DocList() {
                     <p>filterstuff</p>
                 </div>
                 <div className="doc-list-cards">
-                    <Row xs={1} sm={2} md={3} lg={4}>
+                    <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
                         <Col>
 
                                 <Card>
