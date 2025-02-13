@@ -10,7 +10,7 @@ export function Login() {
                 <p>Your archive for letters, journals, and other family history documents</p>
             </div>
             <div className="login">
-            <form id="login" className="form-group" method="get" action="docs.html">
+            <form id="login" className="form-group" method="get" action="docs">
                 <h3>Log in to share documents</h3>
                 <div className="email input-group">
                     <label className="input-group-text" for="email">Email</label>
@@ -21,8 +21,8 @@ export function Login() {
                     <input type="password" className="form-control" id="password" name="varPassword" placeholder="password"/>
                 </div>
                 <div className="form-actions">
-                    <button type="submit" className="btn btn-primary">Login</button>
-                    <a href="create-account.html" className="btn btn-secondary">New? Create an account</a>
+                    <button type="submit" to='docs' className="btn btn-primary">Login</button>
+                    <a href="docs" className="btn btn-secondary">New? Create an account</a>
                 </div>
             </form>
         </div>
