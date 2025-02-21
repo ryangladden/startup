@@ -43,10 +43,8 @@ export default function DocCard() {
         </Link>
         <Card.Body>
             <Card.Title>{title}</Card.Title>
-            <Card.Text>
-            <div>Author: {name}</div>
-            <div>{date}</div>
-            </Card.Text>
+            <Card.Text>Author: {name}</Card.Text>
+            <Card.Text>{date}</Card.Text>
             <Card.Link to="/doc-viewer">View</Card.Link>
             <Card.Link to="/sharing">Share</Card.Link>
         </Card.Body>

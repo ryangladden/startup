@@ -6,32 +6,45 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 export default function CardList() {
+    const initialCards = []
+    for (let i = 0; i < 15; i++) {
+        initialCards.push(
+        <Col> 
+            <DocCard key={i}/>
+        </Col>
+        );
+    };
+    const [cards, setCards] = React.useState(initialCards)
 
-    const [cards, setCards] = useState([])
 
     
 
     function generateCards() {
-        
+
+        console.log("YOU MADE IT TO THE BOTTOM BRO")
         const newCards = [];
-        
-        for (let i = 0; i < 15; i++) {
-            cards.push(
+        for (let i = cards.length; i < cards.length + 15; i++) {
+            newCards.push(
             <Col> 
-                <DocCard />
-            </Col>   );
+                <DocCard key={i}/>
+            </Col>
+            );
         };
-        return;
+        setCards(cards.concat(newCards))
     }
-    generateCards();
+
+    function delayGeneration() {
+        setTimeout(() => generateCards(), 1000)
+    }
 
     return (
     <div className="doc-list-cards">
     <InfiniteScroll
         dataLength={cards.length}
-        next={generateCards}
-        hasMore={cards.length <= 45}
+        next={delayGeneration}
+        hasMore={cards.length <= 150}
         loader={<p>Loading more documents</p>}
+        height={700}
         endMessage={<p>End list</p>}>
             <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
                 {cards}
