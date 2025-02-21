@@ -5,7 +5,7 @@ export default function Filter() {
 
     const [filter, setFilter] = React.useState(
         {
-            sortBy: 'date',
+            sortBy: 'title',
             filterBy: {
                 author: [
                     "Joe Mama",
@@ -43,9 +43,33 @@ export default function Filter() {
         })
     };
         
-    function handleYearRangeChange(e) {}
+    function handleYearRangeChange(e) {
+        console.log(e.target.name)
+        if (e.target.name = 'year-lower') {
+            setFilter({
+                sortBy: filter.sortBy,
+                filterBy: {
+                    author: filter.filterBy.author,
+                    date: [e.target.value, filter.filterBy.date[1]]
+                }
+            }) 
+        }
 
-    function handleFilterChange(e) {}
+        else {
+            setFilter({
+                sortBy: filter.sortBy,
+                filterBy: {
+                    author: filter.filterBy.author,
+                    date: [filter.filterBy.date[0], e.target.value]
+                }
+            }) 
+        }
+
+    }
+
+    function handleFilterChange(e) {
+
+    }
 
 
     const names = [
@@ -54,7 +78,6 @@ export default function Filter() {
         "Gary E. Stevenson"
     ]
 
-    const allowed_names = [];
     let nameFilter = [];
 
     for (const name in names) {
@@ -107,8 +130,11 @@ export default function Filter() {
                     <Form.Control
                         type='year'
                         placeholder='1958'
+                        defaultValue={1958}
                         className='year-box'
                         size='sm'
+                        name='year-lower'
+                        onChange={handleYearRangeChange}
                     />
                 </Form.Group>
                 <Form.Group className='year-input'>
@@ -117,9 +143,12 @@ export default function Filter() {
                     </Form.Label>
                     <Form.Control
                         type='year'
-                        placeholder='1958'
+                        placeholder='2000'
                         className='year-box'
                         size='sm'
+                        defaultValue={2000}
+                        name='year-upper'
+                        onChange={handleYearRangeChange}
                     />
                 </Form.Group>
             </Form>
