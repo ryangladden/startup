@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import './doc_list.css'
+import CardList from './CardList'
 
 export function DocList() {
     return (
@@ -17,7 +18,8 @@ export function DocList() {
                 <div className="doc-list-filter">
                     <p>filterstuff</p>
                 </div>
-                <div className="doc-list-cards">
+                <CardList />
+                {/* <div className="doc-list-cards">
                     <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
                         <Col>
 
@@ -252,7 +254,7 @@ export function DocList() {
                             </Col>
                     </Row>
 
-                </div>
+                </div> */}
             </div>
         </main>
     );
