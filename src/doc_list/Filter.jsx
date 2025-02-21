@@ -67,8 +67,16 @@ export default function Filter() {
 
     }
 
-    function handleFilterChange(e) {
-
+    function handleSortChange(e) {
+        console.log("changed sort")
+        setFilter({
+            sortBy: e.target.value,
+            filterBy: {
+                author: filter.filterBy.author,
+                date: filter.filterBy.date
+            }
+        }) 
+        console.log(filter)
     }
 
 
@@ -102,6 +110,7 @@ export default function Filter() {
                     id='radio1'
                     value='date'
                     name='order'
+                    onChange={handleSortChange}
                 />
                 <Form.Check
                     type='radio'
@@ -109,6 +118,7 @@ export default function Filter() {
                     id='radio2'
                     value='author'
                     name='order'
+                    onChange={handleSortChange}
                 />
                 <Form.Check
                     type='radio'
@@ -116,6 +126,7 @@ export default function Filter() {
                     id='radio3'
                     value='title'
                     name='order'
+                    onChange={handleSortChange}
                 />
                 </Form.Group>
             </Form>
