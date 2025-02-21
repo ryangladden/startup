@@ -35,10 +35,19 @@ main {
 .doc-list-filter {
     flex: 0 250px;
 }
-/* 
-h3. {
-    padding-left: 200px;
-} */
+
+.year-filter {
+    display: flex;
+    flex-direction: row;
+}
+
+.year-input {
+    flex: 1;
+}
+
+.year-box {
+    width: 80px;
+}
 
 @media (max-width: 700px) {
     .doc-list-filter, footer {
