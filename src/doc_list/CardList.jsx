@@ -29,14 +29,14 @@ const titles = [
     "Really sad letter"
 ]
 
-const cards = []
+const randomCards = []
 for (let i = 0; i < 105; i++) {
     const metadata = {};
     metadata.date = dates[Math.floor(Math.random() * 3)];
     metadata.author = names[Math.floor(Math.random() * 3)];
     metadata.title = titles[Math.floor(Math.random() * 3)];
     metadata.cover = covers[Math.floor(Math.random() * 3)];
-    cards.push(
+    randomCards.push(
     <Col> 
         <DocCard key={metadata.title + "_" + i} data={metadata}/>
     </Col>
@@ -44,60 +44,41 @@ for (let i = 0; i < 105; i++) {
 };
 
 
-export default function CardList() {
-    const initialCards = []
-    for (let i = 0; i < 15; i++) {
-        const metadata = {};
-        metadata.date = dates[Math.floor(Math.random() * 3)];
-        metadata.author = names[Math.floor(Math.random() * 3)];
-        metadata.title = titles[Math.floor(Math.random() * 3)];
-        metadata.cover = covers[Math.floor(Math.random() * 3)];
-        initialCards.push(
-        <Col  key={i}> 
-            <DocCard data={metadata}/>
-        </Col>
-        );
-    };
-    const [cards, setCards] = React.useState(initialCards)
+export default function CardList(props) {
 
+    const [cards, setCardList] = React.useState(props.cards.slice(0,15));
 
-    
-
-    function generateCards() {
-
-        console.log("YOU MADE IT TO THE BOTTOM BRO")
-        const newCards = [];
-        for (let i = cards.length; i < cards.length + 15; i++) {
-
-            const metadata = {};
-            metadata.date = dates[Math.floor(Math.random() * 3)];
-            metadata.author = names[Math.floor(Math.random() * 3)];
-            metadata.title = titles[Math.floor(Math.random() * 3)];
-            metadata.cover = covers[Math.floor(Math.random() * 3)];
-            newCards.push(
-            <Col> 
-                <DocCard key={i} data={metadata}/>
-            </Col>
-            );
-        };
-        setCards(cards.concat(newCards))
+    function handleScrollEnd() {
+        const currentSize = cards.length
+        setCardList(props.cards.slice(0, currentSize + 15))
     }
 
     function delayGeneration() {
-        setTimeout(() => generateCards(), 1000)
+        setTimeout(() => handleScrollEnd(), 1000)
     }
+
+    React.useEffect(() => {
+        setCardList(props.cards.slice(0, cards.length))}, [props.cards]);  
 
     return (
     <div className="doc-list-cards">
     <InfiniteScroll
         dataLength={cards.length}
         next={delayGeneration}
-        hasMore={cards.length <= 150}
+        hasMore={cards.length < props.cards.length}
         loader={<p>Loading more documents</p>}
         height={700}
         endMessage={<p>End list</p>}>
             <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
-                {cards}
+                {cards.map(
+                    card =>
+                    (
+                        <Col key={card.id}>
+                            <DocCard data={card} />
+                        </Col>
+                    )
+                )
+            }
             </Row>
             </InfiniteScroll>
         </div>

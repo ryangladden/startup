@@ -6,6 +6,7 @@ export default function SearchBar() {
             <h3>Username's Documents</h3>
             <input type="text" className="form-control search-input" placeholder="search by author, document type, date..." />
             <button className="btn btn-secondary">Search</button>
+            <button className= 'btn btn-secondary'>Upload new Document</button>
         </div>
     );
 }
