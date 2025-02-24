@@ -3,10 +3,11 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
-import './doc_list.css'
+import './DocListPage.css'
 import CardList from './CardList'
 import Filter from './Filter'
 import SearchBar from './SearchBar'
+import PopUp from './PopUp'
 
 
 const covers = [
@@ -33,7 +34,7 @@ const covers = [
 //     "Really sad letter"
 // ]
 
-const dates = [
+var dates = [
     "12 July 1958", "29 January 1981", "04 March 2000", "15 August 1975", "22 November 1995",
     "30 September 1963", "10 June 1988", "05 April 2010", "18 December 1947", "01 February 2022",
     "08 May 1990", "14 July 2015", "19 October 1983", "03 June 1971", "27 March 1969",
@@ -47,7 +48,7 @@ const dates = [
     "27 July 2013", "06 June 2006", "09 April 1954"
 ];
 
-const names = [
+var names = [
     "Joe Mama", "John Doe", "Gary E. Stevenson", "Jane Smith", "Samuel Adams",
     "Rebecca Black", "Charles Montgomery", "Olivia Benson", "Ethan Hunt", "Margaret Thatcher",
     "Bruce Wayne", "Clark Kent", "Peter Parker", "Tony Stark", "Natasha Romanoff",
@@ -61,7 +62,7 @@ const names = [
     "Sherlock Holmes", "John Watson", "James Moriarty"
 ];
 
-const titles = [
+var titles = [
     "Mission Letter", "First day at college journal", "Really sad letter", "Lost in New York Diary", "The Day I Got a Dog",
     "Reflections on a Rainy Day", "A Letter to My Future Self", "Grandma's Secret Recipe", "Surviving the Apocalypse", "A Love Letter to Pizza",
     "That Time I Got Lost in Walmart", "The Mystery of the Missing Socks", "Confessions of a Procrastinator", "The One That Got Away", "How I Met Your Mother (Not the Show)",
@@ -117,9 +118,15 @@ export function DocList() {
 
     const [filter, setFilter] = React.useState(baseFilter);
     const [cardList, setCardList] = React.useState(sortCards(cards, filter));
+    const [modalShow, setModalShow] = React.useState(false);
+
+    function handleUpload(data) {
+        setCardList([...cardList, {
+            title: data.title, author: data.author, date: data.date, id: 10000, cover: null} ])
+    titles.push(data.title); names.push(data.author); dates.push(data.date);
+    }
 
     function handleFilterData(data) {
-
         setFilter(data);
     }
 
@@ -168,9 +175,14 @@ export function DocList() {
         return newCardList;
     }
 
+
+
     return (
         <main className='container-fluid'>
+
             <SearchBar />
+            <button className= 'btn btn-secondary' onClick={() => setModalShow(true)}>Upload new Document</button>
+            <PopUp show={modalShow} cancel={() => setModalShow(false)} uploadData={handleUpload}/>
             <div className="container-fluid doc-list">
                 <Filter sendFilterData={handleFilterData} baseFilter={baseFilter}/>
                 <CardList cards={cardList}/>

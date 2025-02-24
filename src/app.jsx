@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./app.css";
 import { NavLink, BrowserRouter, Route, Routes, } from 'react-router-dom';
 import { Login } from './login/login';
-import { DocList } from './doc_list/doc_list';
+import { DocList } from './doc_list/DocListPage';
 import { DocViewer } from './doc_viewer/doc_viewer';
 import { About } from './about/about';
 import { Sharing } from './sharing/sharing';
