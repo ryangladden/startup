@@ -14,7 +14,7 @@ main {
 
 .search-input {
     flex: 1;
-    /* width: 300px; */
+    width: 40vw;
 }
 
 .doc-list {
@@ -50,8 +50,14 @@ main {
 }
 
 .name-filter {
+    width: 80%;
     overflow-y: scroll;
-    height: 30vh
+    height: 25vh;
+    background-color: white;
+    padding: 10px;
+    border-radius: 3%;
+    border: #4ca99b;
+    margin-bottom: 10px;
 }
 
 .author {

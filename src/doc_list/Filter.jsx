@@ -113,14 +113,15 @@ export default function Filter( { sendFilterData, baseFilter } ) {
 
     let nameFilter = [];
 
-    for (const name in names.sort()) {
+    for (const name in baseFilter.filterBy.author.sort()) {
+        const current = baseFilter.filterBy.author.sort()[name]
         nameFilter.push(<Form.Check
         type='checkbox'
-        label={names[name]}
+        label={current}
         key={'filter_' + name}
         defaultChecked={true}
         onChange={handleAuthorListChange}
-        value={names[name]}
+        value={current}
         />)
     }
     return (
@@ -131,9 +132,10 @@ export default function Filter( { sendFilterData, baseFilter } ) {
                 <Form.Group>
                 <Form.Check
                     type='radio'
-                    label='Date'
-                    id='radio1'
-                    value='date'
+                    label='Document title'
+                    id='radio3'
+                    value='title'
+                    defaultChecked={true}
                     name='order'
                     onChange={handleSortChange}
                 />
@@ -147,19 +149,20 @@ export default function Filter( { sendFilterData, baseFilter } ) {
                 />
                 <Form.Check
                     type='radio'
-                    label='Document title'
-                    id='radio3'
-                    value='title'
-                    defaultChecked={true}
+                    label='Date'
+                    id='radio1'
+                    value='date'
                     name='order'
                     onChange={handleSortChange}
                 />
                 </Form.Group>
             </Form>
+            <br/>
             <h6>Authors:</h6>
             <div  className='name-filter'>
             {nameFilter}
             </div>
+            <br/>
             <h6>Year Range:</h6>
             <Form className='year-filter'>
                 <Form.Group className='year-input'>

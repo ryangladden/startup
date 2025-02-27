@@ -26,14 +26,17 @@ export default function PopUp( { uploadData, show, cancel } ) {
                         <Form.Label>Document Title</Form.Label>
                         <Form.Control type='text'/>
                     </Form.Group>
+                    <br/>
                     <Form.Group>
                         <Form.Label>Date</Form.Label>
                         <Form.Control type='date'/>
                     </Form.Group>
+                    <br/>
                     <Form.Group>
                         <Form.Label>Author</Form.Label>
                         <Form.Control />
                     </Form.Group>
+                    <br/>
                     <Form.Group>
                         <Form.Control type='file' />
                     </Form.Group>

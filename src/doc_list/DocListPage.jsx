@@ -175,13 +175,15 @@ export function DocList() {
         return newCardList;
     }
 
-
+    function toggleModal() {
+        setModalShow(true);
+    }
 
     return (
         <main className='container-fluid'>
 
-            <SearchBar />
-            <button className= 'btn btn-secondary' onClick={() => setModalShow(true)}>Upload new Document</button>
+            <SearchBar upload={toggleModal}/>
+            
             <PopUp show={modalShow} cancel={() => setModalShow(false)} uploadData={handleUpload}/>
             <div className="container-fluid doc-list">
                 <Filter sendFilterData={handleFilterData} baseFilter={baseFilter}/>
