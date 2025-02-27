@@ -1,17 +1,24 @@
 import React from 'react';
 import "./login.css";
 import CreateAccount from "./CreateAccount";
+import { Button } from 'react-bootstrap'
 
 export function Login() {
+
+    const [show, setShow] = React.useState(false);
+
+    const cancel = () => setShow(false);
+
   return (
     <main>
-        <CreateAccount/>
+        <CreateAccount cancel={cancel} show={show}/>
             <div className="welcome">
                 <h2>Welcome to</h2>
                 <h2 className="logo typing" >Archive Lens</h2>
                 <p>Your archive for letters, journals, and other family history documents</p>
             </div>
             <div className="login">
+            <br/>
             <form id="login" className="form-group" method="get" action="docs">
                 <h3>Log in to share documents</h3>
                 <div className="email input-group">
@@ -23,8 +30,8 @@ export function Login() {
                     <input type="password" className="form-control" id="password" name="varPassword" placeholder="password"/>
                 </div>
                 <div className="form-actions">
-                    <button type="submit" to='docs' className="btn btn-primary">Login</button>
-                    <a href="docs" className="btn btn-secondary">New? Create an account</a>
+                    <Button type="submit" to='docs' variant={'primary'}>Login</Button>
+                    <Button onClick={()=>setShow(true)} variant={'secondary'}>New? Create an account</Button>
                 </div>
             </form>
         </div>

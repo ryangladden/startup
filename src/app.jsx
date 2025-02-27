@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./app.css";
 import { NavLink, BrowserRouter, Route, Routes, } from 'react-router-dom';
-import { Login } from './login/login';
+import { Login } from './login/Login'
 import { DocList } from './doc_list/DocListPage';
 import { DocViewer } from './doc_viewer/doc_viewer';
 import { About } from './about/about';
