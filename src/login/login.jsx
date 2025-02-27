@@ -1,9 +1,11 @@
 import React from 'react';
 import "./login.css";
+import CreateAccount from "./CreateAccount";
 
 export function Login() {
   return (
     <main>
+        <CreateAccount/>
             <div className="welcome">
                 <h2>Welcome to</h2>
                 <h2 className="logo typing" >Archive Lens</h2>
