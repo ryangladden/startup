@@ -89,3 +89,20 @@ The structure of the webpages builting using HTML.
 * about page
 [x] All pages are routed on the main App. 
 
+## React Deliverable Phase 2
+
+This deliverable involves JavaScript and React. All database calls and API calls have been simulated.
+
+[x] **Functionality mocked out:** 
+
+* Create new account popup (Login)
+* Create new document popup (Documents)
+* Chat feature that uses `setTimeout` to receive a fake message (click `send message` on Sharing page to send/receive some messages)
+* Send button on chat works (Sharing)
+* Filtering on left side of document list page filters documents (search does not) (Documents)
+* Loads more documents when you scroll to the end of the list (Documents)
+
+[x] **Hooks:** `useState` and `useEffect` are used extensively for a reactive app. 
+
+* Create new account form includes validation (email format, passwords match, etc.) (Documents)
+
