@@ -116,6 +116,10 @@ const baseFilter = {
 
 export function DocList() {
 
+
+    const [nameList, setNameList] = React.useState(names);
+    const [titleList, setTitles] = React.useState(titles);
+    const [dateList, setDateList] = React.useState(dates);
     const [filter, setFilter] = React.useState(baseFilter);
     const [cardList, setCardList] = React.useState(sortCards(cards, filter));
     const [modalShow, setModalShow] = React.useState(false);
@@ -128,6 +132,12 @@ export function DocList() {
 
     function handleFilterData(data) {
         setFilter(data);
+    }
+
+    function addAuthor(author) {
+        if (!baseFilter.sortBy.author.contains(author)) {
+
+        }
     }
 
     React.useEffect(() =>

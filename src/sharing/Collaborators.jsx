@@ -11,6 +11,6 @@ export default function Collaborators({enableChat}) {
     <CollaboratorCard collaborator='Catherine de Burg' enableChat={enableChat}/>
     <CollaboratorCard collaborator='Captain Jack Sparrow' enableChat={enableChat}/>
     <button className="btn btn-primary">Search for more collaborators</button>
-</aside>
+    </aside>
     )
 }
