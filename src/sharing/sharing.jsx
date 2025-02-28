@@ -1,8 +1,24 @@
 import React from 'react';
 import './sharing.css'
+import Collaborators from './Collaborators';
+import Chat from './Chat';
 
 export function Sharing() {
-  return (
+
+
+    const [showChat, setShowChat] = React.useState(false);
+    const [chatUser, setChatUser] = React.useState('')
+
+    function enableChat(e) {
+        setChatUser(e.target.value)
+        setShowChat(true);
+    }
+
+    function disableChat() {
+        setShowChat(false);
+    }
+
+    return (
     <main className='sharing'>
     <section className="sharing">
         <h3>Sharing</h3>
@@ -24,31 +40,7 @@ export function Sharing() {
         </div>
         </div>
     </section>
-<aside>
-    <h3>Your Collaborators</h3>
-    <div className="card">
-        <div className="card-body">
-            <h5>Collaborator 1</h5>
-            <a className="card-link">Send a message</a>
-            <a className="card-link">Share a document</a>
-        </div>
-    </div>
-    <div className="card">
-        <div className="card-body">
-            <h5>Joe Mama</h5>
-            <a className="card-link">Send a message</a>
-            <a className="card-link">Share a document</a>
-        </div>
-    </div>
-    <div className="card">
-        <div className="card-body">
-            <h5>Ryan Gladden</h5>
-            <a className="card-link">Send a message</a>
-            <a className="card-link">Share a document</a>
-        </div>
-    </div>
-    <button className="btn btn-primary">Search for more collaborators</button>
-</aside>
+    {showChat ? <Chat user={chatUser} disableChat={()=>setShowChat(false)}/> : <Collaborators enableChat={enableChat}/>}
 </main>
   );
 }
