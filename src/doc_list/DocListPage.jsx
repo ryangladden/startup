@@ -16,10 +16,11 @@ export function DocList() {
     const [loaded, setLoaded] = React.useState(false);
     const [modalShow, setModalShow] = React.useState(false);
     const [query, setQuery] = React.useState("");
+    const [length, setLength] = React.useEffect(15)
 
-    React.useEffect(() => {
+    React.useEffect( () => {
         async function fetchData() {
-            const cards = await getCards();
+            const cards = await getCards("");
             console.log(cards);
             setCardList(cards);
             setLoaded(true)
@@ -28,8 +29,19 @@ export function DocList() {
     }, []
     )
 
-    async function getCards() {
-        const cards = await fetch("/api/docs/list", {method: "get"});
+
+    React.useEffect( () => {
+        async function fetchData() {
+            const cards = await getCards(query);
+            console.log(cards);
+            console.log("Do nada")
+            setCardList(cards);
+        }
+        fetchData()
+    }, [query])
+
+    async function getCards(query) {
+        const cards = await fetch("/api/docs/list?" + query, {method: "get"});
         console.log("called /api/docs/list");
         return await cards.json();
     }
@@ -45,7 +57,7 @@ export function DocList() {
             
             <PopUp show={modalShow} cancel={() => setModalShow(false)}/>
             <div className="container-fluid doc-list">
-                <Filter />
+                <Filter setQuery={(query) => setQuery(query)}/>
                 <CardList cardList={cardList} loaded={loaded}/>
             </div>
         </main>

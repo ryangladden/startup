@@ -92,7 +92,7 @@ app.get("/api/docs/list", (req, res) => {
 })
 
 app.get("/api/docs/filter", (req, res) => {
-    res.send(JSON.stringify(docs.createFilter(cards)));
+    res.send(docs.createFilter(cards));
 })
 
 app.listen(port);

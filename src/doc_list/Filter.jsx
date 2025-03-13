@@ -3,16 +3,38 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 
-export default function Filter( { } ) {
+export default function Filter( { setQuery } ) {
 
-    const [filter, setFilter] = React.useState({dates: [0,0], names: []})
-    const [loaded, setLoaded] = React.useState(false)
+    const [filter, setFilter] = React.useState({dates: [0,0], names: []});
+    const [loaded, setLoaded] = React.useState(false);
+    const [exclude, setExclude] = React.useState([]);
+    const [dateRange, setDateRange] = React.useState(filter.dates);
+    const [sortBy, setSortBy] = React.useState("title");
 
     async function getFilter() {
         const filter = await fetch("/api/docs/filter", {method: "get"});
         console.log("called /api/docs/filter");
         return await filter.json();
     }
+
+    function sendFilter() {
+        setQuery(generateQuery())
+    }
+
+    function generateQuery() {
+        var query = "";
+        query += "sortby=" + sortBy;
+        query += "&daterange=" + dateRange[0] + "," + dateRange[1];
+        query += "&exclude=";
+        for (const name of exclude) {
+            query += name.replace(" ", "%20") + ",";
+        }
+        return query;
+    }
+
+    React.useEffect( () => {
+        setDateRange(filter.dates);
+    }, [filter])
 
     React.useEffect( () => {
         async function fetchFilter() {
@@ -21,44 +43,27 @@ export default function Filter( { } ) {
             setLoaded(true);
         }
         fetchFilter();
-
     }, [])
 
     function handleAuthorListChange(e) {
-        var authors = filter.filterBy.author;
-        var newAuthors = []
         if (e.target.checked) {
-            authors.push(e.target.value);
-            newAuthors = authors;
-            console.log(e.target.value + " CHECKED");
+            setExclude(exclude.filter(name => name != e.target.value));
+            console.log("Checked")
+            console.log(exclude);
         }
         else {
-            newAuthors = authors.filter(name => name != e.target.value);
-            console.log(e.target.value + " UNCHECKED")
+            setExclude([...exclude, e.target.value])
+            console.log("Unchecked");
+            console.log(exclude);
         }
-        console.log(newAuthors)
-        setFilter({
-            sortBy: filter.sortBy,
-            filterBy: {
-                author: newAuthors,
-                date: filter.filterBy.date
-            }
-        })
     };
 
     function handleSortChange(e) {
-        setFilter({
-            sortBy: e.target.value,
-            filterBy: {
-                author: filter.filterBy.author,
-                date: filter.filterBy.date
-            }
-        }) 
+        setSortBy(e.target.value);
+        console.log(sortBy);
+        console.log(generateQuery());
     }
 
-    function handleClick() {
-        sendFilterData(filter)
-    }
     return (
         <div className="doc-list-filter">
             <h5>Filter document list</h5>
@@ -90,6 +95,7 @@ export default function Filter( { } ) {
                         className='year-box'
                         size='sm'
                         name='year-lower'
+                        onChange={(e) => setDateRange([e.target.value, dateRange[1]])}
                     />
                 </Form.Group>
                 <Form.Group className='year-input'>
@@ -103,13 +109,14 @@ export default function Filter( { } ) {
                         size='sm'
                         defaultValue={filter.dates[1]}
                         name='year-upper'
+                        onChange={(e) => setDateRange([dateRange[0], e.target.value])}
                     />
                 </Form.Group>
             </Form>
             </> : <h4>Loading...</h4>}
             <br/>
             <Form.Group>
-                <Button variant='primary' onClick={ handleClick }>
+                <Button variant='primary' onClick={ sendFilter }>
                 Filter
                 </Button>
                 </Form.Group>
