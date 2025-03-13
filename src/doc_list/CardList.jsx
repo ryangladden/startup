@@ -48,14 +48,7 @@ export default function CardList( { cardList, loaded } ) {
 
     return (
     <div className="doc-list-cards">
-    {loaded ? <InfiniteScroll
-        dataLength={12}
-        next={delayGeneration}
-        hasMore={false}
-        loader={<p>Loading more documents</p>}
-        height={700}
-        endMessage={<p>End list</p>}>
-            <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
+    {loaded ? (<Row xs={1} sm={2} md={3} lg={4} className='g-4'>
                 {cardList.map(
                     (card) =>
                     (
@@ -65,8 +58,7 @@ export default function CardList( { cardList, loaded } ) {
                     )
                 )
             }
-            </Row>
-            </InfiniteScroll> : <h4>Loading...</h4>}
+            </Row>) : <h4>Loading...</h4>}
         </div>
     );
 }

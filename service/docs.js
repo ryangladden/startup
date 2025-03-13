@@ -1,3 +1,4 @@
+const multer = require("multer");
 
 function getDateEnds(dates) {
     const converted = dates.map(date => new Date(date).getFullYear())
@@ -64,11 +65,24 @@ function sortCards(cards, sortby) {
         case 'date':
             return sortDates(cards);
     }
-    console.log("by title")
     return sortTitle(cards);
 }
 
+const uploadFile = multer({
+    storage: multer.diskStorage({
+      destination: 'public/pdfs/',
+      filename: (req, file, cb) => {
+        const filetype = file.originalname.split('.').pop();
+        const id = Math.round(Math.random() * 1e9);
+        const filename = `${id}.${filetype}`;
+        cb(null, filename);
+      },
+    }),
+  });
+
+
 module.exports = {
     filter,
-    createFilter
+    createFilter,
+    uploadFile
 }

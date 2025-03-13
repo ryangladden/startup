@@ -16,12 +16,10 @@ export function DocList() {
     const [loaded, setLoaded] = React.useState(false);
     const [modalShow, setModalShow] = React.useState(false);
     const [query, setQuery] = React.useState("");
-    const [length, setLength] = React.useEffect(15)
 
     React.useEffect( () => {
         async function fetchData() {
             const cards = await getCards("");
-            console.log(cards);
             setCardList(cards);
             setLoaded(true)
         }
@@ -33,8 +31,6 @@ export function DocList() {
     React.useEffect( () => {
         async function fetchData() {
             const cards = await getCards(query);
-            console.log(cards);
-            console.log("Do nada")
             setCardList(cards);
         }
         fetchData()

@@ -13,6 +13,8 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.use(`api`, apiRouter);
 
+var id = 51;
+
 var users = [{
     name: 'Ryan Gladden',
     email: 'ryan@gladdenfamily.org',
@@ -42,7 +44,6 @@ app.post("/api/user", async (req, res) => {
         const { email, name, password } = req.body;
         users.push(await auth.createUser(email, name, password, users));
         const token = await auth.login(email, password, users);
-        console.log(token);
         authTokens[token] = email;
         auth.setAuthCookie(res, token);
         res.send({email: email, name: name});
@@ -55,7 +56,6 @@ app.post("/api/session", async (req, res) => {
     try {
         const { email, password } = req.body;
         const token = await auth.login(email, password, users);
-        console.log(token);
         auth.setAuthCookie(res, token);
         authTokens[token] = email;
         res.send({email: email, name: auth.getUser("email", email, users).name});
@@ -83,7 +83,7 @@ app.delete("/api/session", async (req, res) => {
 
 app.get("/api/docs/list", (req, res) => {
     const newCards = docs.filter(cards, req.query);
-    console.log(req.query)
+
     try {
         res.send(newCards);
     } catch(error) {
@@ -93,6 +93,17 @@ app.get("/api/docs/list", (req, res) => {
 
 app.get("/api/docs/filter", (req, res) => {
     res.send(docs.createFilter(cards));
+})
+
+app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
+    if (req.file) {
+        res.send({
+            message: "Upload succeeded",
+            file: req.file.filename
+        });
+    } else {
+        res.status(400).send({message: 'Upload failed'})
+    }
 })
 
 app.listen(port);
