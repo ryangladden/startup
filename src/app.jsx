@@ -10,8 +10,21 @@ import { Sharing } from './sharing/sharing';
 
 export default function App() {
 
+    async function isAuthenticated() {
+        const response = await fetch("/api/session", {
+            method: "get"
+        })
+        const authenticate = await response.json()
+        const authed = await authenticate.authenticated
+        setAuthentication(authed)
+    }
+
     const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
-    const [authenticated, setAuthentication] = React.useState(userName === '');
+    const [authenticated, setAuthentication] = React.useState(false);
+    
+    React.useEffect( () => {
+        isAuthenticated()}, []);
+
     return (
     <BrowserRouter>
       <div className='body'>
@@ -20,19 +33,19 @@ export default function App() {
                 <NavLink to="docs" className="navbar-brand logo"><img src="/logo-colorful.webp" width='50' className="logo"/>rchive Lens</NavLink>
                 <menu className="navbar-nav">
                     <li className="nav-item"><NavLink className="nav-link" to="">Login</NavLink></li>
-                    <li className="nav-item"><NavLink className="nav-link" to="docs">Documents</NavLink></li>
-                    <li className="nav-item"><NavLink className="nav-link" to="sharing">Sharing</NavLink></li>
+                    {authenticated && <li className="nav-item"><NavLink className="nav-link" to="docs">Documents</NavLink></li>}
+                    {authenticated && <li className="nav-item"><NavLink className="nav-link" to="sharing">Sharing</NavLink></li>}
                     <li className="nav-item"><NavLink className="nav-link" to="about">About</NavLink></li>
                 </menu>
             </nav>
         </header>
         <div>
         <Routes>
-            <Route path='/' element={<Login userName={userName} authenticated={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} exact />
-            <Route path='/docs' element={<DocList />} />
+            <Route path='/' element={<Login userName={userName} authState={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} exact />
+            {authenticated && <Route path='/docs' element={<DocList />} />}
             <Route path='/about' element={<About />} />
-            <Route path='/sharing' element={<Sharing />} />
-            <Route path='/doc-viewer' element={<DocViewer />} />
+            {authenticated && <Route path='/sharing' element={<Sharing />} />}
+            {authenticated && <Route path='/doc-viewer' element={<DocViewer />} />}
         </Routes>
         </div>
         <footer className="container-fluid ">

@@ -29,49 +29,35 @@ const titles = [
     "Really sad letter"
 ]
 
-const randomCards = []
-for (let i = 0; i < 105; i++) {
-    const metadata = {};
-    metadata.date = dates[Math.floor(Math.random() * 3)];
-    metadata.author = names[Math.floor(Math.random() * 3)];
-    metadata.title = titles[Math.floor(Math.random() * 3)];
-    metadata.cover = covers[Math.floor(Math.random() * 3)];
-    randomCards.push(
-    <Col> 
-        <DocCard key={metadata.title + "_" + i} data={metadata}/>
-    </Col>
-    );
-};
 
+export default function CardList( { cardList, loaded } ) {
 
-export default function CardList(props) {
+    // const [cards, setCardList] = React.useState(props.cardList.slice(0,15));
 
-    const [cards, setCardList] = React.useState(props.cards.slice(0,15));
-
-    function handleScrollEnd() {
-        const currentSize = cards.length
-        setCardList(props.cards.slice(0, currentSize + 15))
-    }
+    // function handleScrollEnd() {
+    //     const currentSize = cards.length
+    //     setCardList(props.cards.slice(0, currentSize + 15))
+    // }
 
     function delayGeneration() {
         setTimeout(() => handleScrollEnd(), 1000)
     }
 
-    React.useEffect(() => {
-        setCardList(props.cards.slice(0, cards.length))}, [props.cards]);  
+    // React.useEffect(() => {
+    //     setCardList(props.cards.slice(0, cards.length))}, [props.cards]);  
 
     return (
     <div className="doc-list-cards">
-    <InfiniteScroll
-        dataLength={cards.length}
+    {loaded ? <InfiniteScroll
+        dataLength={12}
         next={delayGeneration}
-        hasMore={cards.length < props.cards.length}
+        hasMore={false}
         loader={<p>Loading more documents</p>}
         height={700}
         endMessage={<p>End list</p>}>
             <Row xs={1} sm={2} md={3} lg={4} className='g-4'>
-                {cards.map(
-                    card =>
+                {cardList.map(
+                    (card) =>
                     (
                         <Col key={card.id}>
                             <DocCard data={card} />
@@ -80,7 +66,7 @@ export default function CardList(props) {
                 )
             }
             </Row>
-            </InfiniteScroll>
+            </InfiniteScroll> : <h4>Loading...</h4>}
         </div>
     );
 }

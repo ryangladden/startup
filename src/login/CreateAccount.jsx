@@ -3,7 +3,7 @@ import { useNavigate} from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import validator from 'validator';
 
-export default function CreateAccount( {show, cancel} ) {
+export default function CreateAccount( {show, cancel, setLoggedIn } ) {
 
 
     const navigate = useNavigate()
@@ -33,7 +33,9 @@ export default function CreateAccount( {show, cancel} ) {
         })
         if (response?.status === 200) {
             localStorage.setItem('currentUser', userName);
-            navigate('/docs')
+            setLoggedIn(true);
+            cancel();
+            // navigate('/docs')
         } else {
             const body = await response.json();
             setDisplayError(`⚠ Error: ${body.msg}`);

@@ -1,20 +1,38 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-export default function LoginForm( { showModal } ) {
+export default function LoginForm( { showModal, setLoggedIn } ) {
     
 
         const showCreateAccount = () => showModal(true);
 
+        const [email, setEmail] = React.useState('');
+        const [password, setPassword] = React.useState('');
+
+        // async function login(e) {
+        //     console.log("Logging in");
+        //     const response = await fetch("/api/user", {
+        //         method: "get",
+        //         body: JSON.stringify({name: varName, password: varPassword}),
+        //         headers: {
+        //             'Content-type': 'application/json; charset=UTF-8',
+        //         },
+        //     })
+        // }
+
         async function login(e) {
-            console.log("Logging in");
-            const response = await fetch("/api/user", {
-                method: "get",
-                body: JSON.stringify({name: varName, password: varPassword}),
+            const response = await fetch("/api/session", {
+                method: 'post',
+                body: JSON.stringify({email: email, password: password}),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
-                },
+                }
             })
+            if (response?.status === 200) {
+                localStorage.setItem('currentUser', response.json().name);
+                setLoggedIn(true);
+                console.log("Yay!!");
+            }
         }
 
     return (
@@ -22,11 +40,11 @@ export default function LoginForm( { showModal } ) {
             <h3>Log in to share documents</h3>
             <div className="email input-group">
                 <label className="input-group-text" for="email">Email</label>
-                <input type="email" className="form-control" id="email" name="varEmail" placeholder="joemama@example.com"/>
+                <input type="email" className="form-control" onChange={(e) => setEmail(e.target.value)} placeholder="joemama@example.com"/>
             </div>
             <div className="password input-group">
                 <label for="password" className="input-group-text">Password</label>
-                <input type="password" className="form-control" id="password" name="varPassword" placeholder="password"/>
+                <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} placeholder="password"/>
             </div>
             <div className="form-actions">
                 <Button type="button" onClick={login} variant={'primary'}>Login</Button>

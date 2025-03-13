@@ -3,9 +3,26 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
 
-export default function Filter( { sendFilterData, baseFilter } ) {
+export default function Filter( { } ) {
 
-    const [filter, setFilter] = React.useState(baseFilter)
+    const [filter, setFilter] = React.useState({dates: [0,0], names: []})
+    const [loaded, setLoaded] = React.useState(false)
+
+    async function getFilter() {
+        const filter = await fetch("/api/docs/filter", {method: "get"});
+        console.log("called /api/docs/filter");
+        return await filter.json();
+    }
+
+    React.useEffect( () => {
+        async function fetchFilter() {
+            const filter = await getFilter();
+            setFilter(filter);
+            setLoaded(true);
+        }
+        fetchFilter();
+
+    }, [])
 
     function handleAuthorListChange(e) {
         var authors = filter.filterBy.author;
@@ -28,30 +45,6 @@ export default function Filter( { sendFilterData, baseFilter } ) {
             }
         })
     };
-        
-    function handleYearRangeChange(e) {
-        console.log(e.target.name)
-        if (e.target.name = 'year-lower') {
-            setFilter({
-                sortBy: filter.sortBy,
-                filterBy: {
-                    author: filter.filterBy.author,
-                    date: [e.target.value, filter.filterBy.date[1]]
-                }
-            }) 
-        }
-
-        else {
-            setFilter({
-                sortBy: filter.sortBy,
-                filterBy: {
-                    author: filter.filterBy.author,
-                    date: [filter.filterBy.date[0], e.target.value]
-                }
-            }) 
-        }
-
-    }
 
     function handleSortChange(e) {
         setFilter({
@@ -67,19 +60,21 @@ export default function Filter( { sendFilterData, baseFilter } ) {
         sendFilterData(filter)
     }
 
-    let nameFilter = [];
+    // let nameFilter = [];
 
-    for (const name in Array.from(new Set(baseFilter.filterBy.authors.sort()))) {
-        const current = Array.from(new Set(baseFilter.filterBy.authors.sort()))[name];
-        nameFilter.push(<Form.Check
-        type='checkbox'
-        label={current}
-        key={'filter_' + name}
-        defaultChecked={true}
-        onChange={handleAuthorListChange}
-        value={current}
-        />)
-    }
+    // for (const name in Array.from(new Set(baseFilter.filterBy.authors.sort()))) {
+    //     const current = Array.from(new Set(baseFilter.filterBy.authors.sort()))[name];
+    //     nameFilter.push(<Form.Check
+    //     type='checkbox'
+    //     label={current}
+    //     key={'filter_' + name}
+    //     defaultChecked={true}
+    //     onChange={handleAuthorListChange}
+    //     value={current}
+    //     />)
+
+        
+    // }
     return (
         <div className="doc-list-filter">
             <h5>Filter document list</h5>
@@ -114,9 +109,10 @@ export default function Filter( { sendFilterData, baseFilter } ) {
                 </Form.Group>
             </Form>
             <br/>
+            {loaded ? <>
             <h6>Authors:</h6>
             <div  className='name-filter'>
-            {nameFilter}
+            {filter.authors.map((name) => {<Form.Check type = 'checkbox' label={name} key={"filter_" + name} defaultChecked={true} onChange={handleAuthorListChange} value={name} />})}
             </div>
             <br/>
             <h6>Year Range:</h6>
@@ -127,12 +123,11 @@ export default function Filter( { sendFilterData, baseFilter } ) {
                     </Form.Label>
                     <Form.Control
                         type='year'
-                        placeholder={baseFilter.filterBy.date[0]}
-                        defaultValue={baseFilter.filterBy.date[0]}
+                        placeholder={filter.dates[0]}
+                        defaultValue={filter.dates[0]}
                         className='year-box'
                         size='sm'
                         name='year-lower'
-                        onChange={handleYearRangeChange}
                     />
                 </Form.Group>
                 <Form.Group className='year-input'>
@@ -141,15 +136,15 @@ export default function Filter( { sendFilterData, baseFilter } ) {
                     </Form.Label>
                     <Form.Control
                         type='year'
-                        placeholder={baseFilter.filterBy.date[1]}
+                        placeholder={filter.dates[1]}
                         className='year-box'
                         size='sm'
-                        defaultValue={baseFilter.filterBy.date[1]}
+                        defaultValue={filter.dates[1]}
                         name='year-upper'
-                        onChange={handleYearRangeChange}
                     />
                 </Form.Group>
             </Form>
+            </> : <h4>Loading...</h4>}
             <br/>
             <Form.Group>
                 <Button variant='primary' onClick={ handleClick }>
