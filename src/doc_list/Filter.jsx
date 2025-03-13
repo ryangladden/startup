@@ -69,8 +69,8 @@ export default function Filter( { sendFilterData, baseFilter } ) {
 
     let nameFilter = [];
 
-    for (const name in Array.from(new Set(baseFilter.filterBy.author.sort()))) {
-        const current = Array.from(new Set(baseFilter.filterBy.author.sort()))[name];
+    for (const name in Array.from(new Set(baseFilter.filterBy.authors.sort()))) {
+        const current = Array.from(new Set(baseFilter.filterBy.authors.sort()))[name];
         nameFilter.push(<Form.Check
         type='checkbox'
         label={current}

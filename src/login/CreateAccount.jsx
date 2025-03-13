@@ -5,6 +5,7 @@ import validator from 'validator';
 
 export default function CreateAccount( {show, cancel} ) {
 
+
     const navigate = useNavigate()
     const close = () => cancel();
 
@@ -20,8 +21,29 @@ export default function CreateAccount( {show, cancel} ) {
     const [emailValid, setEmailValid] = React.useState(true);
     const [submit, setSubmit] = React.useState('');
 
+
+    async function createAccount() {
+        console.log("createAccount called");
+        const response = await fetch("/api/user", {
+            method: 'post',
+            body: JSON.stringify({name: userName, email: email, password: password}),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        if (response?.status === 200) {
+            localStorage.setItem('currentUser', userName);
+            navigate('/docs')
+        } else {
+            const body = await response.json();
+            setDisplayError(`⚠ Error: ${body.msg}`);
+        }
+    }
+
     function handleSubmit(e) {
-        navigate('/docs')
+        console.log(e);
+        e.preventDefault();
+        createAccount();
     }
 
     function updateEmail(e) {
@@ -73,16 +95,16 @@ export default function CreateAccount( {show, cancel} ) {
             <Form onSubmit={handleSubmit}>
             <Modal.Body>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control placeholder='Your Name' type='text' onChange={updateUserName}/>
+                    <Form.Control placeholder='Your Name' name='varName' type='text' onChange={updateUserName}/>
                     <Form.Label></Form.Label>
                     <br/>
                     <Form.Label>Email</Form.Label>
-                    <Form.Control type='email' placeholder='email@example.com' onChange={updateEmail} onBlur={()=> setEmailEdited(true)}/>
+                    <Form.Control type='email' placeholder='email@example.com' name='varEmail' onChange={updateEmail} onBlur={()=> setEmailEdited(true)}/>
                     <div style={{height: '30px'}}>
                     <Form.Label style={{color: 'red'}} hidden={emailValid}>Invalid email</Form.Label>
                     </div>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control placeholder='password' type='password' onFocus={()=>setPasswordEdited(true)} onBlur={updatePassword} onChange={checkPasswordMatches}/>
+                    <Form.Control placeholder='password' type='password' name='varPassword' onFocus={()=>setPasswordEdited(true)} onBlur={updatePassword} onChange={checkPasswordMatches}/>
                     <br/>
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control placeholder='confirm password' type='password' onFocus={()=>setConfirmEdited(true)} onBlur={updateConfirm} onChange={checkConfirmMatches}/>
@@ -92,8 +114,8 @@ export default function CreateAccount( {show, cancel} ) {
             </Modal.Body>
             <Modal.Footer>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
-                    <Button to='docs' type={submit} disabled={!activeConfirm}>Create Account</Button>
-                    <Button variant={'secondary'} onClick={close}>Cancel</Button>
+                    <Button onClick={handleSubmit} type='button' disabled={!activeConfirm}>Create Account</Button>
+                    <Button variant={'secondary'} type='button' onClick={close}>Cancel</Button>
                     </div>
             </Modal.Footer>
             </Form>

@@ -9,6 +9,9 @@ import { About } from './about/about';
 import { Sharing } from './sharing/sharing';
 
 export default function App() {
+
+    const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
+    const [authenticated, setAuthentication] = React.useState(userName === '');
     return (
     <BrowserRouter>
       <div className='body'>
@@ -25,7 +28,7 @@ export default function App() {
         </header>
         <div>
         <Routes>
-            <Route path='/' element={<Login />} exact />
+            <Route path='/' element={<Login userName={userName} authenticated={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} exact />
             <Route path='/docs' element={<DocList />} />
             <Route path='/about' element={<About />} />
             <Route path='/sharing' element={<Sharing />} />

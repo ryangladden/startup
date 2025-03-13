@@ -2,7 +2,8 @@ import React from 'react';
 import './doc_viewer.css';
 import Card from 'react-bootstrap/Card';
 
-export function DocViewer() {
+export function DocViewer({ metadata, document }) {
+
   return (
     <main className='container-fluid'>
       <span id="return">
@@ -16,28 +17,24 @@ export function DocViewer() {
             </div>
             <div className="sidebar">
                 <div className="doc-title">
-                    <h2>Old Letter to Joe</h2>
-                    <h3>Letter</h3>
+                    <h2>{metadata.title}</h2>
                 </div>
                 <div className="metadata">
                     <div className="date">
                         <img src="calendar.svg" width="30"/>
-                        <p>5 April 2001</p>
+                        <p>{metadata.date}</p>
                     </div>
                     <div className="date">
                         <img src="map.svg" width="30"/>
-                        <p>Ibisa, Spain</p>
+                        <p>{metadata.location}</p>
                     </div>
                     <div className="people">
                         <h4>People</h4>
-                        <p>Author(s): Joe Mama</p>
-                        <p>Mentioned: Joe Mama's Mama</p>
+                        <p>Author: {metadata.author}</p>
                     </div>
                     <div className="tags">
                         <h4>Tags</h4>
-                            <button className="btn btn-secondary">tag1</button>
-                            <button className="btn btn-secondary">mission letter</button>
-                            <button className="btn btn-secondary">tag3</button>
+                            {metadata.tags.map((tag) => <button>{tag}</button>)}
                     </div>
                     <div className="in-history card card-body">
                       <Card>
