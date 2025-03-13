@@ -23,25 +23,52 @@ function filterAuthors(cards, excludeString) {
 }
 
 function filterDates(cards, range) {
-    dates = range.split(',');
+    const dates = range.split(',');
     return cards.filter((card) => new Date(card.date).getFullYear() <= Number(dates[1]) && new Date(card.date).getFullYear() >= Number(dates[0]))
 }
 
 function filter(cards, query) {
     const exclude = query.exclude;
     const daterange = query.daterange;
-    var filtered = cards;
+    const sortby = query.sortby;
+    var filtered = [...cards];
     if (exclude) {
         filtered = filterAuthors(filtered, exclude);
     }
-    console.log(filtered);
     if (daterange) {
         filtered = filterDates(filtered, daterange);
     }
-    console.log(filtered);
+    filtered = sortCards(filtered, sortby)
     return filtered;
 }
 
+function sortTitle(cards) {
+    var sorted = [...cards];
+    return sorted.sort((a,b) => a.title.localeCompare(b.title))
+}
+
+function sortAuthors(cards) {
+    var sorted = [...cards];
+    return sorted.sort((a,b) => a.author.localeCompare(b.author))
+}
+
+function sortDates(cards) {
+    var sorted = [...cards];
+    return sorted.sort((a,b) => new Date(a.date) - new Date(b.date))
+}
+
+function sortCards(cards, sortby) {
+    switch(sortby) {
+        case 'author':
+            return sortAuthors(cards);
+        case 'date':
+            return sortDates(cards);
+    }
+    console.log("by title")
+    return sortTitle(cards);
+}
+
 module.exports = {
-    filter
+    filter,
+    createFilter
 }

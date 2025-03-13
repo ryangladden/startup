@@ -15,6 +15,7 @@ export function DocList() {
     const [cardList, setCardList] = React.useState([]);
     const [loaded, setLoaded] = React.useState(false);
     const [modalShow, setModalShow] = React.useState(false);
+    const [query, setQuery] = React.useState("");
 
     React.useEffect(() => {
         async function fetchData() {

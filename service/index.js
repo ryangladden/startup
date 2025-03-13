@@ -83,6 +83,7 @@ app.delete("/api/session", async (req, res) => {
 
 app.get("/api/docs/list", (req, res) => {
     const newCards = docs.filter(cards, req.query);
+    console.log(req.query)
     try {
         res.send(newCards);
     } catch(error) {
@@ -91,7 +92,7 @@ app.get("/api/docs/list", (req, res) => {
 })
 
 app.get("/api/docs/filter", (req, res) => {
-    res.send(JSON.stringify(docs.createFilter()));
+    res.send(JSON.stringify(docs.createFilter(cards)));
 })
 
 app.listen(port);

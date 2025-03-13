@@ -59,60 +59,22 @@ export default function Filter( { } ) {
     function handleClick() {
         sendFilterData(filter)
     }
-
-    // let nameFilter = [];
-
-    // for (const name in Array.from(new Set(baseFilter.filterBy.authors.sort()))) {
-    //     const current = Array.from(new Set(baseFilter.filterBy.authors.sort()))[name];
-    //     nameFilter.push(<Form.Check
-    //     type='checkbox'
-    //     label={current}
-    //     key={'filter_' + name}
-    //     defaultChecked={true}
-    //     onChange={handleAuthorListChange}
-    //     value={current}
-    //     />)
-
-        
-    // }
     return (
         <div className="doc-list-filter">
             <h5>Filter document list</h5>
             <Form>
                 <h6>Sort by:</h6>
                 <Form.Group>
-                <Form.Check
-                    type='radio'
-                    label='Document title'
-                    id='radio3'
-                    value='title'
-                    defaultChecked={true}
-                    name='order'
-                    onChange={handleSortChange}
-                />
-                <Form.Check
-                    type='radio'
-                    label='Author Name'
-                    id='radio2'
-                    value='author'
-                    name='order'
-                    onChange={handleSortChange}
-                />
-                <Form.Check
-                    type='radio'
-                    label='Date'
-                    id='radio1'
-                    value='date'
-                    name='order'
-                    onChange={handleSortChange}
-                />
+                <Form.Check type='radio' label='Document title' id='radio3' value='title' defaultChecked={true} name='order'  onChange={handleSortChange}/>
+                <Form.Check type='radio' label='Author Name' id='radio2' value='author' name='order' onChange={handleSortChange} />
+                <Form.Check type='radio' label='Date' id='radio1' value='date' name='order' onChange={handleSortChange} />
                 </Form.Group>
             </Form>
             <br/>
             {loaded ? <>
             <h6>Authors:</h6>
             <div  className='name-filter'>
-            {filter.authors.map((name) => {<Form.Check type = 'checkbox' label={name} key={"filter_" + name} defaultChecked={true} onChange={handleAuthorListChange} value={name} />})}
+            {filter.authors.map((name) => <Form.Check type = 'checkbox' label={name} key={"filter_" + name} defaultChecked={true} onChange={handleAuthorListChange} value={name} />)}
             </div>
             <br/>
             <h6>Year Range:</h6>
