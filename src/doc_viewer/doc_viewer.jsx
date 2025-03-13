@@ -1,8 +1,31 @@
 import React from 'react';
 import './doc_viewer.css';
 import Card from 'react-bootstrap/Card';
+import { useParams } from 'react-router-dom';
 
-export function DocViewer({ metadata, document }) {
+const placeholder = {
+    title: "Loading...",
+    author: "",
+    location: "",
+    date: "",
+    tags: [""]
+}
+
+export function DocViewer() {
+
+    const { id } = useParams();
+    const [metadata, setMetadata] = React.useState(placeholder)
+
+    React.useEffect( () => {
+        async function fetchData() {
+            const response = await fetch(`/api/docs/${id}`, {
+                method: "get",
+            })
+            const data = await response.json();
+            setMetadata(data);
+        }
+        fetchData();
+    }, [])
 
   return (
     <main className='container-fluid'>
@@ -13,7 +36,7 @@ export function DocViewer({ metadata, document }) {
         </span>
         <div className="doc-data container-fluid">
             <div className="viewer">
-                <iframe type="pdf" src="example.pdf" width="95%" height="95%"></iframe>
+                <iframe type="pdf" src="/example.pdf" width="95%" height="95%"></iframe>
             </div>
             <div className="sidebar">
                 <div className="doc-title">
@@ -21,11 +44,11 @@ export function DocViewer({ metadata, document }) {
                 </div>
                 <div className="metadata">
                     <div className="date">
-                        <img src="calendar.svg" width="30"/>
+                        <img src="/calendar.svg" width="30"/>
                         <p>{metadata.date}</p>
                     </div>
                     <div className="date">
-                        <img src="map.svg" width="30"/>
+                        <img src="/map.svg" width="30"/>
                         <p>{metadata.location}</p>
                     </div>
                     <div className="people">

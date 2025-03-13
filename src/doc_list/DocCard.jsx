@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 
 
 export default function DocCard(props) {
-    const { cover, title, author, date } = props.data;
+    const { cover, title, author, date, id } = props.data;
     const metadata = {}
 
     return (
     <Card>
-        <Link to='/doc-viewer'>
+        <Link to={'/docs/' + id}>
             <Card.Img variant="top" src={cover} className='card-img' style={{ height: '200px', objectFit: 'cover' }} />
         </Link>
         <Card.Body>

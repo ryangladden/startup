@@ -45,7 +45,7 @@ export default function App() {
             {authenticated && <Route path='/docs' element={<DocList />} />}
             <Route path='/about' element={<About />} />
             {authenticated && <Route path='/sharing' element={<Sharing />} />}
-            {authenticated && <Route path='/doc-viewer' element={<DocViewer />} />}
+            {authenticated && <Route path='/docs/:id' element={<DocViewer />} />}
         </Routes>
         </div>
         <footer className="container-fluid ">

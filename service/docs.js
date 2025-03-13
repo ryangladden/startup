@@ -68,6 +68,11 @@ function sortCards(cards, sortby) {
     return sortTitle(cards);
 }
 
+function updateCards(cards, req, id) {
+    var metadata = {title: req.body.title, author: req.body.author, date: req.body.date, cover: "journal.png", id: id}
+    cards.push(metadata)
+}
+
 const uploadFile = multer({
     storage: multer.diskStorage({
       destination: 'public/pdfs/',
@@ -84,5 +89,6 @@ const uploadFile = multer({
 module.exports = {
     filter,
     createFilter,
-    uploadFile
+    uploadFile,
+    updateCards
 }

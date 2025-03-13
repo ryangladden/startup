@@ -97,6 +97,8 @@ app.get("/api/docs/filter", (req, res) => {
 
 app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
     if (req.file) {
+        docs.updateCards(cards, req, id++)
+        console.log(cards);
         res.send({
             message: "Upload succeeded",
             file: req.file.filename
@@ -104,6 +106,13 @@ app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
     } else {
         res.status(400).send({message: 'Upload failed'})
     }
+})
+
+app.get("/api/docs/:id", (req, res) => {
+    console.log("document asked:")
+    const docId = parseInt(req.params.id, 10);
+    const document = cards.find((card) => card.id === docId);
+    res.send(JSON.stringify(document));
 })
 
 app.listen(port);

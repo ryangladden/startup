@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export default function PopUp( { uploadData, show, cancel } ) {
+
+    const navigate = useNavigate()
 
     const [author, setAuthor] = React.useState('');
     const [title, setTitle] = React.useState('');
@@ -34,11 +37,25 @@ export default function PopUp( { uploadData, show, cancel } ) {
     async function upload() {
         const response = await fetch('/api/docs/upload', {
             method: 'post',
-            body: formData
+            body: prepareForm()
         });
-        msg = await response.json();
-        console.log(msg);
+        if (response?.status === 200) {
+            navigate('/docs')
+        }
     }
+
+    function prepareForm() {
+        const formElements = document.forms['uploadForm'].elements;
+
+        var formData = new FormData();
+        formData.append('title', formElements['title'].value);
+        formData.append('author', formElements['author'].value);
+        formData.append('date', formElements['date'].value);
+        formData.append('file', formElements['file'].files[0]);
+        
+        return formData
+    }
+
 
 
     return (
@@ -46,7 +63,7 @@ export default function PopUp( { uploadData, show, cancel } ) {
             <Modal.Header closeButton>
             <Modal.Title>Upload New Document</Modal.Title>
             </Modal.Header>
-            <Form>
+            <Form name="uploadForm">
             <Modal.Body>
                     <Form.Group>
                         <Form.Label>Document Title</Form.Label>
