@@ -43,8 +43,11 @@ export function DocViewer() {
 
             })
             const data = await response.json();
-            console.log(data);
-            setInHistory(data[0].event)
+            if (data[0]) {
+                setInHistory(data[0].event)
+            } else {
+                setInHistory("No historical events for this day.")
+            }
         }
         if (metadata.date) {
         fetchData();
