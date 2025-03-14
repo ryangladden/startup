@@ -27,9 +27,12 @@ export default function LoginForm( { showModal, setLoggedIn } ) {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 }
+
             })
+            const data = await response.json()
             if (response?.status === 200) {
-                localStorage.setItem('currentUser', response.json().name);
+                localStorage.setItem('currentUser', await data.name);
+                console.log(data)
                 setLoggedIn(true);
                 console.log("Yay!!");
             }

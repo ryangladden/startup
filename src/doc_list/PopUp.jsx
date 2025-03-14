@@ -51,6 +51,8 @@ export default function PopUp( { uploadData, show, cancel } ) {
         formData.append('title', formElements['title'].value);
         formData.append('author', formElements['author'].value);
         formData.append('date', formElements['date'].value);
+        formData.append('location', formElements['location'].value);
+        formData.append('tags', ['tag1', 'tag2', 'tag3']);
         formData.append('file', formElements['file'].files[0]);
         
         return formData
@@ -78,6 +80,11 @@ export default function PopUp( { uploadData, show, cancel } ) {
                     <Form.Group>
                         <Form.Label>Date</Form.Label>
                         <Form.Control type='date' name='date' onChange={(e) => appendData(e)}/>
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control type='text' name='location' onChange={(e) => appendData(e)}/>
                     </Form.Group>
                     <br/>
                     <Form.Group>

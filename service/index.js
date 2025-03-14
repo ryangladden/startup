@@ -84,46 +84,80 @@ app.delete("/api/session", async (req, res) => {
 })
 
 app.get("/api/docs/list", (req, res) => {
-    const newCards = docs.filter(cards, req.query);
+    const authToken = req.cookies.token;
+    if (auth.authenticate(authToken, authTokens)) {
+        const newCards = docs.filter(cards, req.query);
 
-    try {
-        res.send(newCards);
-    } catch(error) {
-        res.send("Uh oh" + error);
+        try {
+            res.send(newCards);
+        } catch(error) {
+            res.send("Uh oh" + error);
+        }
     }
+    else {
+        res.status(400).send("Error: unauthorized");
+    }
+        
 })
 
 app.get("/api/docs/filter", (req, res) => {
-    res.send(docs.createFilter(cards));
+    const authToken = req.cookies.token;
+    if (auth.authenticate(authToken, authTokens)) {
+        res.send(docs.createFilter(cards));
+    }
+    else {
+        res.status(400).send("Error: unauthorized");
+    }
 })
 
 app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
-    if (req.file) {
-        docs.updateCards(cards, req, id++)
-        console.log(cards);
-        res.send({
-            message: "Upload succeeded",
-            file: req.file.filename
-        });
-    } else {
-        res.status(400).send({message: 'Upload failed'})
+    const authToken = req.cookies.token;
+    if (auth.authenticate(authToken, authTokens)) {
+        if (req.file) {
+            docs.updateCards(cards, req, id++)
+            paths.push({id: (id - 1), path: req.file.filename})
+            console.log(cards);
+            console.log(paths)
+            res.send({
+                message: "Upload succeeded",
+                file: req.file.filename
+            });
+        } else {
+            res.status(400).send({message: 'Upload failed'})
+        }
+    }
+    else {
+        res.status(400).send("Error: unauthorized");
     }
 })
 
 app.get("/api/docs/:id", (req, res) => {
-    console.log("document asked:")
-    const docId = parseInt(req.params.id, 10);
-    const document = cards.find((card) => card.id === docId);
-    res.send(JSON.stringify(document));
+    const authToken = req.cookies.token;
+    if (auth.authenticate(authToken, authTokens)) {
+        console.log("document asked:")
+        const docId = parseInt(req.params.id, 10);
+        const document = cards.find((card) => card.id === docId);
+
+        res.send(JSON.stringify(document));
+    }
+    else {
+        res.status(400).send("Error: unauthorized");
+    }
 })
 
 app.get("/api/docs/:id/file", (req, res) => {
-    console.log("Getting file")
-    const docId = parseInt(req.params.id, 10);
-    const document = docs.getFileFromId(paths, docId);
-    console.log(document)
-    const filePath = path.join(__dirname, "/../public/pdfs", document.path);
-    res.sendFile(filePath);
+    const authToken = req.cookies.token;
+    if (auth.authenticate(authToken, authTokens)) {
+        console.log("Getting file")
+        const docId = parseInt(req.params.id, 10);
+        const document = docs.getFileFromId(paths, docId);
+        console.log(document)
+        const filePath = path.join(__dirname, "/../public/pdfs", document.path);
+        res.sendFile(filePath);
+    }
+    else {
+        res.status(400).send("Error: unauthorized");
+    }
 })
 
 app.listen(port);

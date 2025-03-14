@@ -10,6 +10,7 @@ export default function UserLoggedIn( { setLoggedIn } ) {
         const response = await fetch("/api/session", {
             method: 'delete',
         })
+        const data = response.json();
         if (response?.status === 200) {
             localStorage.setItem('currentUser', '');
             setLoggedIn(false);

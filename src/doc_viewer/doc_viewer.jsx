@@ -35,7 +35,7 @@ export function DocViewer() {
             console.log(date.getFullYear())
             console.log(date.getDate())
             console.log(date.getMonth())
-            const response = await fetch(`https://api.api-ninjas.com/v1/historicalevents?day=${date.getDate()}&month=${date.getMonth()}&year=${date.getFullYear()}`, {
+            const response = await fetch(`https://api.api-ninjas.com/v1/historicalevents?day=${date.getDate() + 1}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`, {
                 method: "get",
                 headers: {
                     'X-Api-Key': key
@@ -83,16 +83,14 @@ export function DocViewer() {
                         <h4>Tags</h4>
                             {metadata.tags.map((tag) => <button>{tag}</button>)}
                     </div>
-                    <div className="in-history card card-body">
                       <Card>
                         <Card.Header>
                         <Card.Title>In History</Card.Title>
                         </Card.Header>
                         <Card.Body><Card.Text>{inHistory}</Card.Text></Card.Body>
                       </Card>
-                    </div>
                 </div>
-                <div className="activity">
+                {/* <div className="activity">
                     <h4>Activity</h4>
                     <div className="card card-body">
                         <h5 className="card-title"><a href="sharing.html">Joe Mama Collaborator</a></h5>
@@ -104,7 +102,7 @@ export function DocViewer() {
                         <p className="card-text text-muted">27 Jan 2025</p>
                         <p className="card-text">shared this document with you"</p>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     </main>
