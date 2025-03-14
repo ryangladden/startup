@@ -1,12 +1,14 @@
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-const express = require('express')
+const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 let apiRouter = express.Router();
 const cards = require('./docs.json');
-const auth = require("./auth")
-const docs = require("./docs")
+const auth = require("./auth");
+const docs = require("./docs");
+const paths = require("./paths.json");
+const path = require("path");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -113,6 +115,15 @@ app.get("/api/docs/:id", (req, res) => {
     const docId = parseInt(req.params.id, 10);
     const document = cards.find((card) => card.id === docId);
     res.send(JSON.stringify(document));
+})
+
+app.get("/api/docs/:id/file", (req, res) => {
+    console.log("Getting file")
+    const docId = parseInt(req.params.id, 10);
+    const document = docs.getFileFromId(paths, docId);
+    console.log(document)
+    const filePath = path.join(__dirname, "/../public/pdfs", document.path);
+    res.sendFile(filePath);
 })
 
 app.listen(port);

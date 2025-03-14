@@ -2,6 +2,7 @@ import React from 'react';
 import './doc_viewer.css';
 import Card from 'react-bootstrap/Card';
 import { useParams } from 'react-router-dom';
+import { key } from './key.json';
 
 const placeholder = {
     title: "Loading...",
@@ -15,6 +16,7 @@ export function DocViewer() {
 
     const { id } = useParams();
     const [metadata, setMetadata] = React.useState(placeholder)
+    const [inHistory, setInHistory] = React.useState("Loading...")
 
     React.useEffect( () => {
         async function fetchData() {
@@ -27,6 +29,28 @@ export function DocViewer() {
         fetchData();
     }, [])
 
+    React.useEffect( () => {
+        async function fetchData() {
+            const date = new Date(metadata.date);
+            console.log(date.getFullYear())
+            console.log(date.getDate())
+            console.log(date.getMonth())
+            const response = await fetch(`https://api.api-ninjas.com/v1/historicalevents?day=${date.getDate()}&month=${date.getMonth()}&year=${date.getFullYear()}`, {
+                method: "get",
+                headers: {
+                    'X-Api-Key': key
+                }
+
+            })
+            const data = await response.json();
+            console.log(data);
+            setInHistory(data[0].event)
+        }
+        if (metadata.date) {
+        fetchData();
+        }
+    }, [metadata])
+
   return (
     <main className='container-fluid'>
       <span id="return">
@@ -36,7 +60,7 @@ export function DocViewer() {
         </span>
         <div className="doc-data container-fluid">
             <div className="viewer">
-                <iframe type="pdf" src="/example.pdf" width="95%" height="95%"></iframe>
+                <iframe type="pdf" src={`/api/docs/${id}/file`} width="95%" height="95%"></iframe>
             </div>
             <div className="sidebar">
                 <div className="doc-title">
@@ -61,10 +85,11 @@ export function DocViewer() {
                     </div>
                     <div className="in-history card card-body">
                       <Card>
+                        <Card.Header>
                         <Card.Title>In History</Card.Title>
+                        </Card.Header>
+                        <Card.Body><Card.Text>{inHistory}</Card.Text></Card.Body>
                       </Card>
-                        <h5 className="card-title">In History:</h5>
-                        <p className="card-text">"in history" external API call</p>
                     </div>
                 </div>
                 <div className="activity">

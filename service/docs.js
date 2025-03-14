@@ -85,10 +85,15 @@ const uploadFile = multer({
     }),
   });
 
+function getFileFromId(paths, id) {
+    return paths.find((path) => path.id === id)
+}
+
 
 module.exports = {
     filter,
     createFilter,
     uploadFile,
-    updateCards
+    updateCards,
+    getFileFromId
 }
