@@ -1,19 +1,22 @@
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 const express = require('express');
-const app = express();
 const cookieParser = require('cookie-parser');
+const app = express();
 let apiRouter = express.Router();
 const cards = require('./docs.json');
 const auth = require("./auth");
 const docs = require("./docs");
+// const db = require("./db");
 const paths = require("./paths.json");
 const path = require("path");
+
+
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
-app.use(`api`, apiRouter);
+app.use(`/api`, apiRouter);
 
 var id = 51;
 
@@ -28,11 +31,11 @@ var authTokens = {
 }
 
 
-app.get("/api/soup", (req, res) => {
+apiRouter.get("/soup", (req, res) => {
     res.send("joe MAMA")
 })
 
-app.get("/api/user", (req, res) => {
+apiRouter.get("/user", (req, res) => {
     const token = req.cookies.token;
     if (auth.authenticate(token, authTokens)) {
         const user = auth.getUser("email", authTokens[token], users)
@@ -41,7 +44,7 @@ app.get("/api/user", (req, res) => {
     res.status(403).send("Error: unauthorized\n");
 })
 
-app.post("/api/user", async (req, res) => {
+apiRouter.post("/user", async (req, res) => {
     try {
         const { email, name, password } = req.body;
         users.push(await auth.createUser(email, name, password, users));
@@ -54,7 +57,7 @@ app.post("/api/user", async (req, res) => {
     }
 });
 
-app.post("/api/session", async (req, res) => {
+apiRouter.post("/session", async (req, res) => {
     try {
         const { email, password } = req.body;
         const token = await auth.login(email, password, users);
@@ -66,12 +69,12 @@ app.post("/api/session", async (req, res) => {
     }
 });
 
-app.get("/api/session", async (req, res) => {
+apiRouter.get("/session", async (req, res) => {
     const authToken = req.cookies.token;
     res.send({authenticated: auth.authenticate(authToken, authTokens)})
 })
 
-app.delete("/api/session", async (req, res) => {
+apiRouter.delete("/session", async (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         delete authTokens[authToken];
@@ -83,7 +86,7 @@ app.delete("/api/session", async (req, res) => {
     }
 })
 
-app.get("/api/docs/list", (req, res) => {
+apiRouter.get("/docs/list", (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         const newCards = docs.filter(cards, req.query);
@@ -100,7 +103,7 @@ app.get("/api/docs/list", (req, res) => {
         
 })
 
-app.get("/api/docs/filter", (req, res) => {
+apiRouter.get("/docs/filter", (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         res.send(docs.createFilter(cards));
@@ -110,7 +113,7 @@ app.get("/api/docs/filter", (req, res) => {
     }
 })
 
-app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
+apiRouter.post("/docs/upload", docs.uploadFile.single('file'), (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         if (req.file) {
@@ -131,7 +134,7 @@ app.post("/api/docs/upload", docs.uploadFile.single('file'), (req, res) => {
     }
 })
 
-app.get("/api/docs/:id", (req, res) => {
+apiRouter.get("/docs/:id", (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         console.log("document asked:")
@@ -145,14 +148,14 @@ app.get("/api/docs/:id", (req, res) => {
     }
 })
 
-app.get("/api/docs/:id/file", (req, res) => {
+apiRouter.get("/api/docs/:id/file", (req, res) => {
     const authToken = req.cookies.token;
     if (auth.authenticate(authToken, authTokens)) {
         console.log("Getting file")
         const docId = parseInt(req.params.id, 10);
         const document = docs.getFileFromId(paths, docId);
         console.log(document)
-        const filePath = path.join(__dirname, "/../public/pdfs", document.path);
+        const filePath = path.join(__dirname, "../public/pdfs", document.path);
         res.sendFile(filePath);
     }
     else {
