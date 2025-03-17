@@ -110,10 +110,17 @@ This deliverable involves JavaScript and React. All database calls and API calls
 Implemented: authenticatio backend endpoints, document and document metadata endpoints
 
 [x] Node.js/Express HTTP service
+
 [x] Static middleware for frontend
+
 [x] Calls to third party endpoints (click on a document and see "in history")
+
 [x] Backend service endpoints - New users stored in memory, new documents stored in memory
+
 [x] Frontend calls endpoints to show dynamic document data
+
 [ ] PDFs are not showing on frontend (worked in dev, debugging required for prod)
+
 [ ] Sharing page requires endpoints
+
 [x] Supports registration, login, logout, and authentication endpoints
