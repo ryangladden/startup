@@ -57,16 +57,19 @@ async function addOwner(userId, documentId, role) {
   }
 }
 
-async function getOwnershipList(userId) {
+async function getOwned(userId) {
   return await ownerCollection.find({user_id: userId}).toArray();
 }
 
-async function getDocsFromIds(ids) {
-  return await docCollection.find({_id: { $in: ids}}).toArray();
-}
-
-async function getDocsByExcludeAuthor(ids, authors, dates) {
-  return await docCollection.find({_id: {'$in': ids}, author: {'$nin': authors}, date: {$gte: new Date(dates[0]), $lte: new Date(dates[1])}}).toArray();
+async function getDocs(ids, authors, dates) {
+  var query = {_id: {$in: ids}};
+  if (authors) {
+    query.author = {$nin: authors};
+  }
+  if (dates) {
+    query.date = {$gte: new Date(dates[0]), $lte: new Date(dates[1])};
+  }
+  return await docCollection.find(query).toArray();
 }
 
 function joinOwnerAndDocs(owners, docList) {
@@ -78,8 +81,8 @@ function joinOwnerAndDocs(owners, docList) {
 
 async function getUserDocuments(email) {
   const userId = await getUserId(email);
-  const owners = await getOwnershipList(userId);
-  var docList = await getDocsByExcludeAuthor(owners.map((ownership) => ownership.document_id), []);
+  const owners = await getOwned(userId);
+  var docList = await getDocs(owners.map((ownership) => ownership.document_id), undefined, undefined);
   return joinOwnerAndDocs(owners, docList);
 }
 
