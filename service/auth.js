@@ -39,7 +39,7 @@ async function login(email, password, users) {
 }
 
 
-function setAuthCookie(res, authToken) {
+async function setAuthCookie(res, authToken) {
     res.cookie('token', authToken, {
       secure: true,
       httpOnly: true,
@@ -47,7 +47,7 @@ function setAuthCookie(res, authToken) {
     });
   }
 
-function authenticate(token, authTokens) {
+async function authenticate(req, res, next) {
     return (authTokens[token] != null);
 }
 

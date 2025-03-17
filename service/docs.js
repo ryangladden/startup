@@ -1,4 +1,6 @@
 const multer = require("multer");
+const multer = require('multer-s3');
+const { nanoid } = require("nanoid");
 
 function getDateEnds(dates) {
     const converted = dates.map(date => new Date(date).getFullYear())
@@ -75,10 +77,10 @@ function updateCards(cards, req, id) {
 
 const uploadFile = multer({
     storage: multer.diskStorage({
-      destination: 'public/pdfs/',
+      destination: 'public/tmp',
       filename: (req, file, cb) => {
         const filetype = file.originalname.split('.').pop();
-        const id = Math.round(Math.random() * 1e9);
+        const id = nanoid();
         const filename = `${id}.${filetype}`;
         cb(null, filename);
       },
@@ -87,6 +89,16 @@ const uploadFile = multer({
 
 function getFileFromId(paths, id) {
     return paths.find((path) => path.id === id)
+}
+
+function createDoc(title, date, author, location, tags) {
+    return {
+        title: title,
+        date: date,
+        author: author,
+        location: location,
+        tags: tags
+    }
 }
 
 

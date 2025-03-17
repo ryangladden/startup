@@ -1,5 +1,6 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { fromIni } = require('@aws-sdk/credential-providers');
+const fs = require('fs');
 
 const {bucket} = require('./s3.json');
 
@@ -27,12 +28,10 @@ async function readFile(fileName) {
     return Body.transformToString();
 }
 
-async function main() {
-    // await uploadFile("./test.txt", 'hello cruel world');
-    const data = await readFile('./test.txt');
-
-    console.log(data);
+module.exports = {
+    uploadFile,
+    readFile
 }
 
-main();
+
 
