@@ -7,7 +7,8 @@ let apiRouter = express.Router();
 const cards = require('./docs.json');
 const auth = require("./auth");
 const docs = require("./docs");
-// const db = require("./db");
+const db = require("./db");
+const s3 = require("./s3");
 const paths = require("./paths.json");
 const path = require("path");
 
@@ -18,17 +19,17 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.use(`/api`, apiRouter);
 
-var id = 51;
+// var id = 51;
 
-var users = [{
-    name: 'Ryan Gladden',
-    email: 'ryan@gladdenfamily.org',
-    password: '$2b$10$FFTxY0yfoljG0GkWM9Trsegb9ZX8g1lhQUU6.W6Pq6tF3V2xcwpS.'
-}]
-var authTokens = {
-    'd3854aa3-3b17-4003-86a0-e60b2da1c4c3': 'ryan@gladdenfamily.org',
-    '9afe7c5d-9c10-486f-b518-7225730a634c': 'ryan@gladdenfamily.org'
-}
+// var users = [{
+//     name: 'Ryan Gladden',
+//     email: 'ryan@gladdenfamily.org',
+//     password: '$2b$10$FFTxY0yfoljG0GkWM9Trsegb9ZX8g1lhQUU6.W6Pq6tF3V2xcwpS.'
+// }]
+// var authTokens = {
+//     'd3854aa3-3b17-4003-86a0-e60b2da1c4c3': 'ryan@gladdenfamily.org',
+//     '9afe7c5d-9c10-486f-b518-7225730a634c': 'ryan@gladdenfamily.org'
+// }
 
 
 apiRouter.get("/soup", (req, res) => {
@@ -36,48 +37,71 @@ apiRouter.get("/soup", (req, res) => {
 })
 
 apiRouter.get("/user", (req, res) => {
-    const token = req.cookies.token;
-    if (auth.authenticate(token, authTokens)) {
-        const user = auth.getUser("email", authTokens[token], users)
-        res.send({email: user.email, name: user.name});
+    try {
+        if (req.user) {
+            console.log
+            res.send({name: req.user.name, email: req.user.email})
+        } else {
+        res.status(403).send("Error: unauthorized\n");
+        }
+    } catch(ex) {
+        res.status(500).send("Error: internal server error")
     }
-    res.status(403).send("Error: unauthorized\n");
 })
 
 apiRouter.post("/user", async (req, res) => {
     try {
-        const { email, name, password } = req.body;
-        users.push(await auth.createUser(email, name, password, users));
-        const token = await auth.login(email, password, users);
-        authTokens[token] = email;
-        auth.setAuthCookie(res, token);
+        const {email, name, password} = req.body;
+        if (!email || !name || !password) {
+            res.status(400).send("Error: bad requeset");
+            return null;
+        }
+        var user = {email: email, name: name, password: password};
+        const userId = await db.createUser(user);
+        if (!userId) {
+            res.status(403).send("Error: user exists");
+            return null;
+        }
+        const login = await db.login(email, password);
+        auth.setAuthCookie(res, login.token);
         res.send({email: email, name: name});
     } catch(error) {
-    res.status(404).send(error);
+    res.status(500).send("Error: internal server error");
     }
 });
 
 apiRouter.post("/session", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const token = await auth.login(email, password, users);
-        auth.setAuthCookie(res, token);
-        authTokens[token] = email;
-        res.send({email: email, name: auth.getUser("email", email, users).name});
+        if (!email || !password) {
+            res.status(400).send("Error: bad request");
+            return null;
+        }
+        const loginResult = await db.login(email, password);
+        console.log(loginResult)
+        if (loginResult) {
+            auth.setAuthCookie(res, loginResult.token);
+            res.send({email: email, name: loginResult.name});
+        } else {
+            res.status(403).send("Error: unauthorized")
+        }
     } catch(error) {
-        res.status(403).send("Error: " + error);
+        res.status(500).send("Error: internal server error");
     }
 });
 
-apiRouter.get("/session", async (req, res) => {
-    const authToken = req.cookies.token;
-    res.send({authenticated: auth.authenticate(authToken, authTokens)})
+apiRouter.get("/session", db.authenticated, async (req, res) => {
+    if (req.user) {
+        res.send({authenticated: true, email: req.user.email, name: req.user.name})
+    }
+    else {
+        res.send({authenticated: false});
+    }
 })
 
-apiRouter.delete("/session", async (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
-        delete authTokens[authToken];
+apiRouter.delete("/session", db.authenticated, db.requireAuth, async (req, res) => {
+    if (req.user) {
+        db.deleteAuth(req.cookies.token);
         res.clearCookie('token')
         res.status(200).send({});
     }
@@ -86,52 +110,28 @@ apiRouter.delete("/session", async (req, res) => {
     }
 })
 
-apiRouter.get("/docs/list", (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
+apiRouter.get("/docs/list", db.authenticated, db.requireAuth, (req, res) => {
         const newCards = docs.filter(cards, req.query);
-
         try {
             res.send(newCards);
         } catch(error) {
             res.send("Uh oh" + error);
         }
-    }
-    else {
-        res.status(400).send("Error: unauthorized");
-    }
-        
 })
 
 apiRouter.get("/docs/filter", (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
+    try {
         res.send(docs.createFilter(cards));
-    }
-    else {
-        res.status(400).send("Error: unauthorized");
+        } catch(ex) {
+            res.status(500).send("Error: internal server error");
     }
 })
 
-apiRouter.post("/docs/upload", docs.uploadFile.single('file'), (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
-        if (req.file) {
-            docs.updateCards(cards, req, id++)
-            paths.push({id: (id - 1), path: req.file.filename})
-            console.log(cards);
-            console.log(paths)
-            res.send({
-                message: "Upload succeeded",
-                file: req.file.filename
-            });
-        } else {
-            res.status(400).send({message: 'Upload failed'})
-        }
+apiRouter.post("/docs/upload", db.authenticated, db.requireAuth, s3.upload.single('file'), db.createDocument, (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({Error: "no file uploaded"});
     }
-    else {
-        res.status(400).send("Error: unauthorized");
-    }
+    db.newDoc(req.user.user_id,)
 })
 
 apiRouter.get("/docs/:id", (req, res) => {

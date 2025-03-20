@@ -1,5 +1,5 @@
 const multer = require("multer");
-const multer = require('multer-s3');
+const multers3 = require('multer-s3');
 const { nanoid } = require("nanoid");
 
 function getDateEnds(dates) {
