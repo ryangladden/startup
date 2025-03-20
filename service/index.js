@@ -36,16 +36,15 @@ apiRouter.get("/soup", (req, res) => {
     res.send("joe MAMA")
 })
 
-apiRouter.get("/user", (req, res) => {
+apiRouter.get("/user", db.authenticated, (req, res) => {
     try {
         if (req.user) {
-            console.log
             res.send({name: req.user.name, email: req.user.email})
         } else {
-        res.status(403).send("Error: unauthorized\n");
+        return res.status(403).send("Error: unauthorized\n");
         }
     } catch(ex) {
-        res.status(500).send("Error: internal server error")
+        return res.status(500).send("Error: internal server error")
     }
 })
 
@@ -53,32 +52,31 @@ apiRouter.post("/user", async (req, res) => {
     try {
         const {email, name, password} = req.body;
         if (!email || !name || !password) {
-            res.status(400).send("Error: bad requeset");
-            return null;
+            return res.status(400).send("Error: bad requeset");
         }
         var user = {email: email, name: name, password: password};
         const userId = await db.createUser(user);
         if (!userId) {
-            res.status(403).send("Error: user exists");
-            return null;
+            return res.status(403).send("Error: user exists");
         }
         const login = await db.login(email, password);
         auth.setAuthCookie(res, login.token);
         res.send({email: email, name: name});
     } catch(error) {
-    res.status(500).send("Error: internal server error");
+    return res.status(500).send("Error: internal server error");
     }
 });
 
 apiRouter.post("/session", async (req, res) => {
+    console.log("User trying to login");
     try {
         const { email, password } = req.body;
+        console.log(`${email}:${password}`);
         if (!email || !password) {
-            res.status(400).send("Error: bad request");
-            return null;
+            return res.status(400).send("Error: bad request");
         }
         const loginResult = await db.login(email, password);
-        console.log(loginResult)
+        console.log("logged in buddy");
         if (loginResult) {
             auth.setAuthCookie(res, loginResult.token);
             res.send({email: email, name: loginResult.name});
@@ -110,18 +108,22 @@ apiRouter.delete("/session", db.authenticated, db.requireAuth, async (req, res) 
     }
 })
 
-apiRouter.get("/docs/list", db.authenticated, db.requireAuth, (req, res) => {
-        const newCards = docs.filter(cards, req.query);
+apiRouter.get("/docs/list", db.authenticated, db.requireAuth, async (req, res) => {
+        const documents = await db.getDocuments(req);
         try {
-            res.send(newCards);
+            res.send(documents);
         } catch(error) {
             res.send("Uh oh" + error);
         }
 })
 
-apiRouter.get("/docs/filter", (req, res) => {
+apiRouter.get("/docs/filter", db.authenticated, db.requireAuth, async (req, res) => {
     try {
-        res.send(docs.createFilter(cards));
+        console.log("Creating filter");
+        console.log(`User: ${req.user}`);
+        const documents = await db.getAllDocuments(req.user.user_id);
+        console.log(documents);
+        res.send(db.createFilter(documents));
         } catch(ex) {
             res.status(500).send("Error: internal server error");
     }
@@ -131,7 +133,8 @@ apiRouter.post("/docs/upload", db.authenticated, db.requireAuth, s3.upload.singl
     if (!req.file) {
         return res.status(400).send({Error: "no file uploaded"});
     }
-    db.newDoc(req.user.user_id,)
+    console.log(req.body.tags);
+    res.status(200).send("File uploaded");
 })
 
 apiRouter.get("/docs/:id", (req, res) => {

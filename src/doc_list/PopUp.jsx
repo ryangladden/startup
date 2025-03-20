@@ -11,16 +11,6 @@ export default function PopUp( { uploadData, show, cancel } ) {
     const [date, setDate] = React.useState('');
     const [formData, updateFormData] = React.useState(new FormData())
 
-    function upload() {
-        uploadData(
-            {
-                'title': title,
-                'author': author,
-                'date': date
-            }
-        )
-        cancel();
-    }
 
     function appendData(e) {
         const data = e.target.name === 'file' ? e.target.files[0] : e.target.value;
@@ -44,15 +34,18 @@ export default function PopUp( { uploadData, show, cancel } ) {
         }
     }
 
+    function parseTags(string) {
+        return string.split(',').map(item => item.trim());
+    }
+
     function prepareForm() {
         const formElements = document.forms['uploadForm'].elements;
-
         var formData = new FormData();
         formData.append('title', formElements['title'].value);
         formData.append('author', formElements['author'].value);
         formData.append('date', formElements['date'].value);
         formData.append('location', formElements['location'].value);
-        formData.append('tags', ['tag1', 'tag2', 'tag3']);
+        formData.append('tags', parseTags(formElements['tags'].value));
         formData.append('file', formElements['file'].files[0]);
         
         return formData
@@ -85,6 +78,12 @@ export default function PopUp( { uploadData, show, cancel } ) {
                     <Form.Group>
                         <Form.Label>Location</Form.Label>
                         <Form.Control type='text' name='location' onChange={(e) => appendData(e)}/>
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label>Tags</Form.Label>
+                        <Form.Control type='text' name='tags' onChange={(e) => appendData(e)}/>
+                        <Form.Label className='text-muted'>Enter tags as a comma-seperated list (tag1,tag2,tag3)</Form.Label>
                     </Form.Group>
                     <br/>
                     <Form.Group>

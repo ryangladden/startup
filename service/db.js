@@ -39,7 +39,9 @@ async function getUser(field, value) {
 }
 
 async function login(email, password) {
+  console.log("DB login function");
   const user = await getUser('email', email);
+  console.log(`User: ${user}`);
   if (await bcrypt.compare(password, user.password)) {
     const token = await createAuth(user);
     return {token: token, name: user.name, email: user.email};
@@ -64,7 +66,7 @@ async function createAuth(user) {
       token: token,
       email: user.email,
       name: user.name,
-      user_id: user.id
+      user_id: user._id
     }
     await authCollection.insertOne(authUser);
     return token;
@@ -102,12 +104,13 @@ async function authenticated(req, res, next) {
 // document operations
 
 function generateMetadata(req) {
+  const tags = req.body.tags.split(',').map(tag => tag.trim());
   return {
     title: req.body.title,
     author: req.body.author,
     date: req.body.date,
     location: req.body.location,
-    tags: req.body.tags,
+    tags: tags,
     key: req.file.key
   }
 }
@@ -123,41 +126,80 @@ function generateRights(userId, docId, role) {
 
 async function createDocument(req, res, next) {
   const document = generateMetadata(req)
-  const docId = await docCollection.insertOne(document);
+  const result = await docCollection.insertOne(document);
+  const docId = result.insertedId;
   const rights = generateRights(req.user.user_id, docId, 'owner')
   await ownerCollection.insertOne(rights);
   next();
 }
 
-// async function createDoc(doc) {
-//   try {
-//     const result = await docCollection.insertOne(doc);
-//     const documentId = result;
-//     return documentId.insertedId;
+async function getAllDocuments(userId) {
+  const ownership = await ownerCollection.find({user_id: userId}).toArray();
+  var docIds = ownership.map((doc) => doc.document_id);
+  const documents = await docCollection.find({"_id": {$in: docIds}}).toArray();
+  return documents
+}
 
-//   } catch(ex) {
-//     throw new Error("Internal server error");
-//   }
-// }
 
-// async function addOwner(userId, documentId, role) {
-//   try {
-//     await ownerCollection.insertOne({
-//       user_id: userId,
-//       document_id: documentId,
-//       role: role
-//       }
-//     )
-//   } catch(ex) {
-//     throw new Error("Internal server error")
-//   }
-// }
+async function getDocuments(req) {
+  const filter = getFilterFromQuery(req);
+  const ownership = await ownerCollection.find({user_id: req.user.user_id}).toArray();
+  if (filter.roles) {
+    console.log("Filtering roles");
+    var docIds = [];
+    for (const doc of ownership) {
+      if (filter.roles.includes(doc.role)) {
+        docIds.push(doc.document_id)
+      }
+    }
+  } else {
+    var docIds = ownership.map((doc) => doc.document_id);
+  }
+  var query = {"_id": {$in: docIds}};
+  if (filter.authors) {
+    query.author = {$nin: filter.authors}
+  }
+  if (filter.daterange) {
+    query.date = {$gte: new Date(filter.daterange[0]), $lte: new Date(filter.daterange[1])};
+  }
+  console.log(query);
+  return await docCollection.find(query).toArray();
+}
 
-// async function newDoc(userId, doc, role) {
-//   // const userId = await getUserId(email);
-//   const docId = await createDoc(doc);
-//   await addOwner(userId, docId, role);
-// }
+function getFilterFromQuery(req) {
+  filter = {};
+  if (req.query.authors) {
+    filter.authors = req.query.authors.split(",");
+  }
+  if (req.query.roles) {
+    filter.roles = req.query.roles.split(',');
+  }
+  if (req.query.daterange) {
+    const range = req.query.daterange.split(',');
+    filter.daterange = range.map((date) => new Date(date)).sort();
+  }
+  return filter;
+}
+
+function createFilter(documents) {
+    var authors = [];
+    var dates = [];
+    for (const document of documents) {
+      console.log(documents);
+        if (!authors.includes(document.author)) {
+        authors.push(document.author);
+        }
+        dates.push(document.date)
+    }
+    return {authors: authors,
+            dates: getDateEnds(dates)};
+}
+
+function getDateEnds(dates) {
+  const converted = dates.map(date => new Date(date).getFullYear())
+  return [Math.min(...converted), Math.max(...converted)]
+}
+
 
 async function getOwned(userId, role) {
   var query = {user_id: userId};
@@ -204,7 +246,7 @@ async function getUserDocuments(email, authors, dates, roles) {
 module.exports = {
   getUserDocuments,
   createUser,
-  newDoc,
+  // newDoc,
   createAuth,
   deleteAuth,
   getAuth,
@@ -213,4 +255,7 @@ module.exports = {
   authenticated,
   requireAuth,
   createDocument,
+  createFilter,
+  getAllDocuments,
+  getDocuments,
 }

@@ -1,5 +1,6 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { fromIni } = require('@aws-sdk/credential-providers');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const multer = require('multer');
 const multers3 = require('multer-s3')
 const fs = require('fs');
@@ -14,17 +15,18 @@ const s3 = new S3Client({
     region: 'us-east-1'
 })
 
-function createBody(filepath) {
-    return fs.createReadStream(file);
-}
-
-async function uploadFile(fileName, filePath) {
-    const command = new PutObjectCommand({
+async function generateUrl(key) {
+    const command = new GetObjectCommand({
         Bucket: bucket,
-        Key: fileName,
-        Body: fs.createReadStream(filePath)
-    });
-    return s3.send(command);
+        Key: key
+    })
+
+    const url = getSignedUrl((s3, command, {
+        expiresIn: 180,
+    }))
+
+    console.log(url)
+    return url;
 }
 
 async function readFile(fileName) {
@@ -40,7 +42,7 @@ upload = multer({
     storage: multers3({
         s3,
         bucket: bucket,
-        acl: 'public-read',
+        // acl: 'public-read',
         contentType: multers3.AUTO_CONTENT_TYPE,
         key: (req, file, cb) => {
             const ext = path.extname(file.originalname)
