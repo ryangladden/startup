@@ -19,6 +19,7 @@ export default function Filter( { setQuery } ) {
 
     function sendFilter() {
         setQuery(generateQuery())
+
     }
 
     function generateQuery() {
@@ -26,9 +27,13 @@ export default function Filter( { setQuery } ) {
         query += "sortby=" + sortBy;
         query += "&daterange=" + dateRange[0] + "," + dateRange[1];
         query += "&exclude=";
+        var excludeString = "";
         for (const name of exclude) {
-            query += name.replace(" ", "%20") + ",";
+            console.log(name);
+            excludeString += name.replace(" ", "%20") + " ";
+            console.log(excludeString);
         }
+        query += excludeString.trim().replace(" ", ",")
         return query;
     }
 

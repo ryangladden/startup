@@ -2,6 +2,7 @@ import React from 'react';
 import './sharing.css'
 import Collaborators from './Collaborators';
 import Chat from './Chat';
+import { Navbar } from 'react-bootstrap';
 
 export function Sharing() {
 
@@ -32,6 +33,9 @@ export function Sharing() {
                 such. Check it out!</p>
         </div>
         <div className="card card-body post">
+            <Navbar>
+                
+            </Navbar>
             <img src="journal.png" className="card-img-top"/>
             <h4 className="card-title">Posted by: Joe Mama</h4>
             <h5 className="card-subtitle">Missionary journal entry</h5>

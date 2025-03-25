@@ -10,6 +10,8 @@ const userCollection = db.collection('user');
 const docCollection = db.collection('docs');
 const ownerCollection = db.collection('ownership');
 const authCollection = db.collection('auth');
+const collabCollection = db.collection('collaborators');
+const collabRequestCollection = db.collection('collabRequests');
 
 
 // User operations
@@ -23,6 +25,7 @@ async function createUser(user) {
     user.password = hashpw;
     const result = await userCollection.insertOne(user);
     const userId = result.insertedId;
+    await collabCollection.insertOne({user_id: userId, collaborators: []})
     return userId;
   } catch(ex) {
     throw new Error("Internal server error");
@@ -39,9 +42,7 @@ async function getUser(field, value) {
 }
 
 async function login(email, password) {
-  console.log("DB login function");
   const user = await getUser('email', email);
-  console.log(`User: ${user}`);
   if (await bcrypt.compare(password, user.password)) {
     const token = await createAuth(user);
     return {token: token, name: user.name, email: user.email};
@@ -67,6 +68,7 @@ async function createAuth(user) {
       email: user.email,
       name: user.name,
       user_id: user._id
+
     }
     await authCollection.insertOne(authUser);
     return token;
@@ -78,9 +80,6 @@ async function createAuth(user) {
 async function getAuth(authToken) {
   const user = await authCollection.findOne({token: authToken});
   const id = await user.user_id;
-  console.log(user);
-
-  console.log("Found");
   return await getUser("_id", user.user_id);
 }
 
@@ -108,7 +107,7 @@ function generateMetadata(req) {
   return {
     title: req.body.title,
     author: req.body.author,
-    date: req.body.date,
+    date: new Date(req.body.date),
     location: req.body.location,
     tags: tags,
     key: req.file.key
@@ -145,7 +144,6 @@ async function getDocuments(req) {
   const filter = getFilterFromQuery(req);
   const ownership = await ownerCollection.find({user_id: req.user.user_id}).toArray();
   if (filter.roles) {
-    console.log("Filtering roles");
     var docIds = [];
     for (const doc of ownership) {
       if (filter.roles.includes(doc.role)) {
@@ -160,32 +158,48 @@ async function getDocuments(req) {
     query.author = {$nin: filter.authors}
   }
   if (filter.daterange) {
-    query.date = {$gte: new Date(filter.daterange[0]), $lte: new Date(filter.daterange[1])};
+    const startDate = filter.daterange[0];
+    const endDate = (new Number(filter.daterange[1]) + 1).toString()
+    query.date = {$gte: new Date(startDate), $lte: new Date(endDate)};
+    console.log(query.date);
+    // const startDate = new Date(filter.daterange[0]); // Start of the range
+    // const endDate = new Date(filter.daterange[1]);  // Copy to avoid modifying original
+    // endDate.setFullYear(endDate.getFullYear() + 1); // Move to start of the next year
+    // endDate.setMonth(0, 1);  // Set to January 1st
+    // endDate.setHours(0, 0, 0, 0); // Midnight
+  
+    query.date = { $gte: startDate, $lt: endDate };
+    console.log(query.date);
   }
   console.log(query);
-  return await docCollection.find(query).toArray();
+  const result = await docCollection.find(query).toArray();
+  return result;
 }
 
 function getFilterFromQuery(req) {
   filter = {};
-  if (req.query.authors) {
-    filter.authors = req.query.authors.split(",");
+  if (req.query.exclude) {
+    filter.authors = req.query.exclude.split(",");
   }
   if (req.query.roles) {
     filter.roles = req.query.roles.split(',');
   }
   if (req.query.daterange) {
-    const range = req.query.daterange.split(',');
-    filter.daterange = range.map((date) => new Date(date)).sort();
+    // const range = req.query.daterange.split(',');
+    filter.daterange = req.query.daterange.split(',');
+    // range.map((date) => new Date(date)).sort();
   }
   return filter;
+}
+
+async function getDocumentById(id) {
+  return await docCollection.findOne({_id: new ObjectId(id)});
 }
 
 function createFilter(documents) {
     var authors = [];
     var dates = [];
     for (const document of documents) {
-      console.log(documents);
         if (!authors.includes(document.author)) {
         authors.push(document.author);
         }
@@ -243,6 +257,30 @@ async function getUserDocuments(email, authors, dates, roles) {
   return joinOwnerAndDocs(owners, docList);
 }
 
+// sharing functions
+
+async function collabRequest(userId, collabEmail) {
+  const collaborator = await getUser("email", collabEmail);
+  console.log(collaborator);
+  if (collaborator) {
+    await collabRequestCollection.insertOne({
+      sender: userId,
+      recipient: collaborator._id
+    })
+  }
+}
+
+// async function addCollaborator(req, res, next) {
+//   if (req.body.email === req.user.email) {
+//     return res.status(403).send("Cannot add self as collaborator")
+//   }
+//   const collaboratorId = await getUser("email", req.body.email);
+//   if (collaboratorId) {
+//     collabCollection.updateMany({user_id: req.user.user_id, $addToSet: {collaborators: collaboratorId}})
+//   }
+//   next();
+// }
+
 module.exports = {
   getUserDocuments,
   createUser,
@@ -258,4 +296,6 @@ module.exports = {
   createFilter,
   getAllDocuments,
   getDocuments,
+  getDocumentById,
+  collabRequest,
 }

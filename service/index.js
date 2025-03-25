@@ -68,15 +68,12 @@ apiRouter.post("/user", async (req, res) => {
 });
 
 apiRouter.post("/session", async (req, res) => {
-    console.log("User trying to login");
     try {
         const { email, password } = req.body;
-        console.log(`${email}:${password}`);
         if (!email || !password) {
             return res.status(400).send("Error: bad request");
         }
         const loginResult = await db.login(email, password);
-        console.log("logged in buddy");
         if (loginResult) {
             auth.setAuthCookie(res, loginResult.token);
             res.send({email: email, name: loginResult.name});
@@ -119,10 +116,7 @@ apiRouter.get("/docs/list", db.authenticated, db.requireAuth, async (req, res) =
 
 apiRouter.get("/docs/filter", db.authenticated, db.requireAuth, async (req, res) => {
     try {
-        console.log("Creating filter");
-        console.log(`User: ${req.user}`);
         const documents = await db.getAllDocuments(req.user.user_id);
-        console.log(documents);
         res.send(db.createFilter(documents));
         } catch(ex) {
             res.status(500).send("Error: internal server error");
@@ -133,37 +127,36 @@ apiRouter.post("/docs/upload", db.authenticated, db.requireAuth, s3.upload.singl
     if (!req.file) {
         return res.status(400).send({Error: "no file uploaded"});
     }
-    console.log(req.body.tags);
     res.status(200).send("File uploaded");
 })
 
-apiRouter.get("/docs/:id", (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
-        console.log("document asked:")
-        const docId = parseInt(req.params.id, 10);
-        const document = cards.find((card) => card.id === docId);
-
-        res.send(JSON.stringify(document));
-    }
-    else {
-        res.status(400).send("Error: unauthorized");
-    }
+apiRouter.get("/docs/:id", db.authenticated, db.requireAuth, async (req, res) => {
+    const docId = req.params.id;
+    var document = await db.getDocumentById(docId);
+    const url = await s3.generateUrl(document.key)
+    document.key = url;
+    res.send(JSON.stringify(document));
 })
 
-apiRouter.get("/api/docs/:id/file", (req, res) => {
-    const authToken = req.cookies.token;
-    if (auth.authenticate(authToken, authTokens)) {
-        console.log("Getting file")
-        const docId = parseInt(req.params.id, 10);
+apiRouter.get("/docs/:id/file", db.authenticated, db.requireAuth, (req, res) => {
+        const docId = req.params.id;
         const document = docs.getFileFromId(paths, docId);
-        console.log(document)
         const filePath = path.join(__dirname, "../public/pdfs", document.path);
         res.sendFile(filePath);
-    }
-    else {
-        res.status(400).send("Error: unauthorized");
-    }
+})
+
+apiRouter.put("/docs/share", (req, res) => {
+
+})
+
+apiRouter.put("/share/request", db.authenticated, db.requireAuth, async (req, res) => {
+    console.log(req.body);
+    await db.collabRequest(req.user.user_id, req.body.email);
+
+})
+
+apiRouter.post("/share/request", db.authenticated, db.requireAuth, (req, res) => {
+
 })
 
 app.listen(port);

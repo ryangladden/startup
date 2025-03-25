@@ -6,7 +6,7 @@ const multers3 = require('multer-s3')
 const fs = require('fs');
 const path = require('path');
 const {v4: uuid} = require('uuid');
-
+const { convert, sizes } = require('image-to-pdf')
 const {bucket} = require('./s3.json');
 
 
@@ -21,28 +21,19 @@ async function generateUrl(key) {
         Key: key
     })
 
-    const url = getSignedUrl((s3, command, {
-        expiresIn: 180,
-    }))
+    const url = await getSignedUrl(s3, command, {
+        expiresIn: 15,
+    })
 
     console.log(url)
     return url;
 }
 
-async function readFile(fileName) {
-    const command = new GetObjectCommand({
-        Bucket: bucket,
-        Key: fileName
-        });
-    const { Body } = await s3.send(command);
-    return Body.transformToString();
-}
 
 upload = multer({
     storage: multers3({
         s3,
         bucket: bucket,
-        // acl: 'public-read',
         contentType: multers3.AUTO_CONTENT_TYPE,
         key: (req, file, cb) => {
             const ext = path.extname(file.originalname)
@@ -54,7 +45,7 @@ upload = multer({
 
 module.exports = {
     upload,
-    readFile
+    generateUrl,
 }
 
 

@@ -52,7 +52,7 @@ export default function CardList( { cardList, loaded } ) {
                 {cardList.map(
                     (card) =>
                     (
-                        <Col key={card.id}>
+                        <Col key={card._id}>
                             <DocCard data={card} />
                         </Col>
                     )

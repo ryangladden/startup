@@ -1,8 +1,9 @@
 import React from 'react';
 import './doc_viewer.css';
 import Card from 'react-bootstrap/Card';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { key } from './key.json';
+
 
 const placeholder = {
     title: "Loading...",
@@ -14,6 +15,8 @@ const placeholder = {
 
 export function DocViewer() {
 
+    const navigate = useNavigate();
+
     const { id } = useParams();
     const [metadata, setMetadata] = React.useState(placeholder)
     const [inHistory, setInHistory] = React.useState("Loading...")
@@ -24,6 +27,7 @@ export function DocViewer() {
                 method: "get",
             })
             const data = await response.json();
+            console.log(data);
             setMetadata(data);
         }
         fetchData();
@@ -54,16 +58,21 @@ export function DocViewer() {
         }
     }, [metadata])
 
+    function splitTags(metadata) {
+        const tags = metadata.tags
+        return tags.split(',');
+    }
+
   return (
     <main className='container-fluid'>
       <span id="return">
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={() => navigate(-1)}>
                 Return to list
             </button>
         </span>
         <div className="doc-data container-fluid">
             <div className="viewer">
-                <iframe type="pdf" src={`/api/docs/${id}/file`} width="95%" height="95%"></iframe>
+                <iframe type="pdf" src={metadata.key} width="95%" height="95%"></iframe>
             </div>
             <div className="sidebar">
                 <div className="doc-title">
@@ -84,7 +93,7 @@ export function DocViewer() {
                     </div>
                     <div className="tags">
                         <h4>Tags</h4>
-                            {metadata.tags.map((tag) => <button>{tag}</button>)}
+                            {/* {metadata.tags.split(',').map((tag) => <button>{tag}</button>)} */metadata.tags}
                     </div>
                       <Card>
                         <Card.Header>
