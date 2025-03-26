@@ -124,3 +124,11 @@ Implemented: authenticatio backend endpoints, document and document metadata end
 [ ] Sharing page requires endpoints
 
 [x] Supports registration, login, logout, and authentication endpoints
+
+## DB Deliverable
+
+[x] User credentials stored and retrieved from MongoDB
+
+[x] Document metadata and sharing data stored in MongoDB
+
+[x] All files are stored in Amazon S3 and retrieved using secure URLs
