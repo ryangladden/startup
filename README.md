@@ -132,3 +132,5 @@ Implemented: authenticatio backend endpoints, document and document metadata end
 [x] Document metadata and sharing data stored in MongoDB
 
 [x] All files are stored in Amazon S3 and retrieved using secure URLs
+
+NOTE: I think when I pushed to GitHub, I rebased and lost all my timestamps. All my commits look like they show up at the same exact time.
