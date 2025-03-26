@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-export default function LoginForm( { showModal, setLoggedIn } ) {
+export default function LoginForm( { showModal, setLoggedIn, showError } ) {
     
 
         const showCreateAccount = () => showModal(true);
@@ -27,14 +27,14 @@ export default function LoginForm( { showModal, setLoggedIn } ) {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 }
-
             })
-            const data = await response.json()
-            if (response?.status === 200) {
+            const res = await response;
+            if (res.status === 200) {
                 localStorage.setItem('currentUser', await data.name);
-                console.log(data)
                 setLoggedIn(true);
-                console.log("Yay!!");
+            } else {
+                console.log("Broooo")
+                showError(true);
             }
         }
 

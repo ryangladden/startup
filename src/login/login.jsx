@@ -3,7 +3,7 @@ import "./login.css";
 import CreateAccount from "./CreateAccount";
 import LoginForm from "./LoginForm";
 import UserLoggedIn from './UserLoggedIn';
-
+import ModalMessage from './ModalMessage'
 
 
 
@@ -12,12 +12,14 @@ export function Login( {setAuthState, authState } ) {
 
 
     const [show, setShow] = React.useState(false);
+    const [showError, setShowError] = React.useState(false);
 
     const cancel = () => setShow(false);
 
 
   return (
     <main>
+        <ModalMessage show={showError} setShow={setShowError} message={"Error: unauthorized"} />
         <CreateAccount cancel={cancel} show={show} setLoggedIn={(state) => setAuthState(state)}/>
             <div className="welcome">
                 <h2>Welcome to</h2>
@@ -26,7 +28,7 @@ export function Login( {setAuthState, authState } ) {
             </div>
             <div className="login">
             <br/>
-            {authState ? <UserLoggedIn setLoggedIn={(state) => setAuthState(state)} /> : <LoginForm showModal={setShow} setLoggedIn={(state) => setAuthState(state)}/> }
+            {authState ? <UserLoggedIn setLoggedIn={(state) => setAuthState(state)} /> : <LoginForm showModal={setShow} showError={setShowError} setLoggedIn={(state) => setAuthState(state)}/> }
         </div>
     </main>
   );
