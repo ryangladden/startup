@@ -149,14 +149,31 @@ apiRouter.put("/docs/share", (req, res) => {
 
 })
 
+apiRouter.get("/share/request", db.authenticated, db.requireAuth, async (req, res) =>{
+    const users = await db.getShareRequests(req.user.user_id);
+    res.send(users);
+})
+
 apiRouter.put("/share/request", db.authenticated, db.requireAuth, async (req, res) => {
-    console.log(req.body);
     await db.collabRequest(req.user.user_id, req.body.email);
 
 })
 
-apiRouter.post("/share/request", db.authenticated, db.requireAuth, (req, res) => {
+apiRouter.post("/share/request", db.authenticated, db.requireAuth, async (req, res) => {
+    if (req.body.accept === true) {
+        await db.acceptRequest(req.user.user_id, req.body.email);
+    } else {
+        await db.denyRequest(req.user.user_id, req.body.email);
+    }
+    res.send("received brother");
+})
 
+apiRouter.get("/share/collaborators", db.authenticated, db.requireAuth, async (req, res) => {
+    const collaborators = await db.getCollaborators(req.user.user_id);
+    if (collaborators) {
+        res.send(collaborators.map((collaborator) => ({name: collaborator.name, email: collaborator.email})))
+    }
+    else { res.send([]) }
 })
 
 app.listen(port);

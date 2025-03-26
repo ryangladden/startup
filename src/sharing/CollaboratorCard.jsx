@@ -6,7 +6,7 @@ export default function CollaboratorCard({collaborator, enableChat}) {
         <Card>
         <Card.Body>
             <Card.Title>{collaborator}</Card.Title>
-            <Button value={collaborator} onClick={enableChat}>Send a message</Button>
+            <Button style={{margin: "1px"}}value={collaborator} onClick={enableChat}>Send a message</Button>
             <Button>Share a document</Button>
         </Card.Body>
     </Card>

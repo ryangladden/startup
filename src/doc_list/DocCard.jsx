@@ -7,6 +7,11 @@ export default function DocCard(props) {
     const { cover, title, author, date, _id } = props.data;
     const metadata = {}
 
+    function formatDate(date) {
+        var formatted = new Date(date);
+        return `${formatted.getDate()} ${formatted.getMont()} ${formatted.getFullYear()}`
+    }
+
     // async function shareDoc(e) {
     //     const response = await fetch("/api/docs/share", {
     //         method: "put",
@@ -25,7 +30,7 @@ export default function DocCard(props) {
         <Card.Body>
             <Card.Title style={{fontSize: 17}}>{title}</Card.Title>
             <Card.Text style={{fontSize: 15}}>Author: {author}</Card.Text>
-            <Card.Text style={{fontSize: 15}}>{date}</Card.Text>
+            <Card.Text style={{fontSize: 15}}>{formatDate(date)}</Card.Text>
             <Card.Link to={'/docs/' + _id}>View</Card.Link>
             <Card.Link to="/sharing">Share</Card.Link>
         </Card.Body>

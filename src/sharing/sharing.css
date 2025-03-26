@@ -47,7 +47,9 @@ aside {
     padding: 30px;
     display: flex;
     flex-direction: column;
-
+    background-color: #c4fcf3;
+    border-radius: 5px;
+    height: 100%
 }
 
 h3 {

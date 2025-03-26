@@ -4,32 +4,34 @@ import CollaboratorCard from './CollaboratorCard';
 
 export default function Collaborators({enableChat}) {
 
-    async function addCollaborator() {
-        const formElements = document.forms['collabRequest'].elements;
-        console.log(formElements);
-        console.log(formElements.collaborator.value)
-        response = await fetch("/api/share/request", {
-            method: "put",
-            body: JSON.stringify({email: formElements.collaborator.value}),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
+    const [collaborators, setCollaborators] = React.useState([])
+
+    async function getCollaborators() {
+        const response = await fetch("/api/share/collaborators", {
+            method: "get"
         })
+        return response;
     }
 
+    React.useEffect(() => {
+        async function fetchData() {
+            const response = await getCollaborators();
+            const collaborators = await response.json();
+
+            console.log(collaborators)
+            setCollaborators(collaborators);
+        }
+        fetchData();
+    }, [])
+
     return (
-    <aside>
+    <div>
     <h3>Your Collaborators</h3>
-    <CollaboratorCard collaborator='Joe Mama' enableChat={enableChat}/>
+    {collaborators.length === 0 ? (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) : collaborators.map((collaborator, index) => (<CollaboratorCard key={index} collaborator={collaborator.name} enableChat={enableChat} />))}
+    {/* <CollaboratorCard collaborator='Joe Mama' enableChat={enableChat}/>
     <CollaboratorCard collaborator='Ryan Gladden' enableChat={enableChat}/>
     <CollaboratorCard collaborator='Catherine de Burg' enableChat={enableChat}/>
-    <CollaboratorCard collaborator='Captain Jack Sparrow' enableChat={enableChat}/>
-    <Form name="collabRequest">
-        <Form.Label>Add Collaborator by Email</Form.Label>
-        <Form.Control type="email" name="collaborator" />
-            <br/>
-        <Button className="btn btn-primary" onClick={addCollaborator}>Add Collaborator</Button>
-    </Form>
-    </aside>
+    <CollaboratorCard collaborator='Captain Jack Sparrow' enableChat={enableChat}/> */}
+    </div>
     )
 }

@@ -259,6 +259,13 @@ async function getUserDocuments(email, authors, dates, roles) {
 
 // sharing functions
 
+async function getShareRequests(userId) {
+  requests = await collabRequestCollection.find({recipient: userId}).toArray();
+  console.log(requests);
+  users = await userCollection.find({_id: {$in: requests.map((request) => request.sender)}}).toArray();
+  return users.map((user) => ({name: user.name, email: user.email}));
+}
+
 async function collabRequest(userId, collabEmail) {
   const collaborator = await getUser("email", collabEmail);
   console.log(collaborator);
@@ -268,6 +275,38 @@ async function collabRequest(userId, collabEmail) {
       recipient: collaborator._id
     })
   }
+}
+
+async function acceptRequest(userId, collabEmail) {
+  console.log("ACCEPTED BROTHER")
+  const sender = await getUser("email", collabEmail);
+  const request = await collabRequestCollection.findOneAndDelete({sender: sender._id, recipient: userId})
+  console.log(request);
+  await collabCollection.updateOne(
+    { user_id: userId },
+    { $addToSet: { collaborators: sender._id} },
+    {upsert: true}
+  )
+  await collabCollection.updateOne(
+    { user_id: sender._id },
+    { $addToSet: { collaborators: userId} },
+    {upsert: true}
+  )
+}
+
+async function denyRequest(userId, collabEmail) {
+  const sender = await getUser("email", collabEmail);
+  const request = collabRequestCollection.findOneAndDelete({sender: sender._id, user_id: userId})
+}
+
+async function getCollaborators(userId) {
+  const user = await collabCollection.findOne({user_id: userId});
+  if (user) {
+    const ids = await user.collaborators
+    const collaborators = await userCollection.find({_id: { $in: ids }}).toArray();
+    return collaborators;
+  }
+  return null;
 }
 
 // async function addCollaborator(req, res, next) {
@@ -298,4 +337,8 @@ module.exports = {
   getDocuments,
   getDocumentById,
   collabRequest,
+  getCollaborators,
+  acceptRequest,
+  denyRequest,
+  getShareRequests,
 }

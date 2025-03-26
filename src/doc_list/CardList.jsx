@@ -32,13 +32,6 @@ const titles = [
 
 export default function CardList( { cardList, loaded } ) {
 
-    // const [cards, setCardList] = React.useState(props.cardList.slice(0,15));
-
-    // function handleScrollEnd() {
-    //     const currentSize = cards.length
-    //     setCardList(props.cards.slice(0, currentSize + 15))
-    // }
-
     function delayGeneration() {
         setTimeout(() => handleScrollEnd(), 1000)
     }
