@@ -41,7 +41,7 @@ export default function App() {
         </header>
         <div>
         <Routes>
-            <Route path='/' element={<Login userName={userName} authState={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} exact />
+            <Route path='/' element={<Login userName={userName} authState={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} />
             {authenticated && <Route path='/docs' element={<DocList />} />}
             <Route path='/about' element={<About />} />
             {authenticated && <Route path='/sharing' element={<Sharing />} />}
