@@ -29,8 +29,9 @@ export default function LoginForm( { showModal, setLoggedIn, showError } ) {
                 }
             })
             const res = await response;
+            const data = res.json()
             if (res.status === 200) {
-                localStorage.setItem('currentUser', await data.name);
+                localStorage.setItem('currentUser', data.name);
                 setLoggedIn(true);
             } else {
                 console.log("Broooo")
