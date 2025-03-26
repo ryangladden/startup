@@ -2,7 +2,7 @@ import React from 'react';
 import DocCard from './DocCard';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 const covers = [
@@ -32,12 +32,23 @@ const titles = [
 
 export default function CardList( { cardList, loaded } ) {
 
-    function delayGeneration() {
-        setTimeout(() => handleScrollEnd(), 1000)
-    }
+    const [collabList, setCollabList] = React.useState([])
 
-    // React.useEffect(() => {
-    //     setCardList(props.cards.slice(0, cards.length))}, [props.cards]);  
+    React.useEffect(() => {
+        async function getCollabs() {
+        const collaborators = await getCollaborators()
+        console.log(collaborators)
+        setCollabList(collaborators);
+        }
+        getCollabs();
+    }, [])
+
+    async function getCollaborators() {
+        const response = await fetch("/api/share/collaborators", {
+            method: "get"
+        })
+        return await response.json();
+    }
 
     return (
     <div className="doc-list-cards">
@@ -46,7 +57,7 @@ export default function CardList( { cardList, loaded } ) {
                     (card) =>
                     (
                         <Col key={card._id}>
-                            <DocCard data={card} />
+                            <DocCard data={card} collaborators={collabList} />
                         </Col>
                     )
                 )

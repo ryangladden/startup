@@ -1,26 +1,28 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
+import { Dropdown, DropdownItem, DropdownToggle } from 'react-bootstrap';
 
 
 export default function DocCard(props) {
     const { cover, title, author, date, _id } = props.data;
-    const metadata = {}
 
     function formatDate(date) {
-        var formatted = new Date(date);
-        return `${formatted.getDate()} ${formatted.getMont()} ${formatted.getFullYear()}`
+        return new Date(date).toLocaleDateString();
     }
 
-    // async function shareDoc(e) {
-    //     const response = await fetch("/api/docs/share", {
-    //         method: "put",
-    //         body: {
-    //             id: _id,
-    //             user:
-    //         }
-    //     })
-    // }
+    async function shareDoc(email) {
+        const response = await fetch("/api/docs/share", {
+            method: "put",
+            body: JSON.stringify({
+                id: _id,
+                email: email
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+    }
 
     return (
     <Card>
@@ -31,8 +33,14 @@ export default function DocCard(props) {
             <Card.Title style={{fontSize: 17}}>{title}</Card.Title>
             <Card.Text style={{fontSize: 15}}>Author: {author}</Card.Text>
             <Card.Text style={{fontSize: 15}}>{formatDate(date)}</Card.Text>
-            <Card.Link to={'/docs/' + _id}>View</Card.Link>
-            <Card.Link to="/sharing">Share</Card.Link>
+            <br/>
+            {/* <Card.Link to="/sharing">Share</Card.Link> */}
+            <Dropdown>
+                <Dropdown.Toggle>Share with...</Dropdown.Toggle>
+                <Dropdown.Menu>
+                {props.collaborators.map((collaborator) => (<Dropdown.Item onClick={() => shareDoc(collaborator.email)} value={collaborator.email}>{collaborator.email}</Dropdown.Item>))}
+                </Dropdown.Menu>
+            </Dropdown>
         </Card.Body>
     </Card>
     );

@@ -160,18 +160,8 @@ async function getDocuments(req) {
   if (filter.daterange) {
     const startDate = filter.daterange[0];
     const endDate = (new Number(filter.daterange[1]) + 1).toString()
-    query.date = {$gte: new Date(startDate), $lte: new Date(endDate)};
-    console.log(query.date);
-    // const startDate = new Date(filter.daterange[0]); // Start of the range
-    // const endDate = new Date(filter.daterange[1]);  // Copy to avoid modifying original
-    // endDate.setFullYear(endDate.getFullYear() + 1); // Move to start of the next year
-    // endDate.setMonth(0, 1);  // Set to January 1st
-    // endDate.setHours(0, 0, 0, 0); // Midnight
-  
     query.date = { $gte: startDate, $lt: endDate };
-    console.log(query.date);
   }
-  console.log(query);
   const result = await docCollection.find(query).toArray();
   return result;
 }
@@ -185,9 +175,7 @@ function getFilterFromQuery(req) {
     filter.roles = req.query.roles.split(',');
   }
   if (req.query.daterange) {
-    // const range = req.query.daterange.split(',');
     filter.daterange = req.query.daterange.split(',');
-    // range.map((date) => new Date(date)).sort();
   }
   return filter;
 }
@@ -259,6 +247,14 @@ async function getUserDocuments(email, authors, dates, roles) {
 
 // sharing functions
 
+async function addViewer(userId, docId) {
+  await ownerCollection.insertOne({
+    user_id: userId,
+    document_id: new ObjectId(docId),
+    role: "viewer"
+  })
+}
+
 async function getShareRequests(userId) {
   requests = await collabRequestCollection.find({recipient: userId}).toArray();
   console.log(requests);
@@ -323,7 +319,6 @@ async function getCollaborators(userId) {
 module.exports = {
   getUserDocuments,
   createUser,
-  // newDoc,
   createAuth,
   deleteAuth,
   getAuth,
@@ -341,4 +336,5 @@ module.exports = {
   acceptRequest,
   denyRequest,
   getShareRequests,
+  addViewer,
 }

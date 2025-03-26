@@ -1,8 +1,4 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { Link } from 'react-router-dom';
 import './DocListPage.css'
 import CardList from './CardList'
 import Filter from './Filter'

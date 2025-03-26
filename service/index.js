@@ -19,18 +19,6 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.use(`/api`, apiRouter);
 
-// var id = 51;
-
-// var users = [{
-//     name: 'Ryan Gladden',
-//     email: 'ryan@gladdenfamily.org',
-//     password: '$2b$10$FFTxY0yfoljG0GkWM9Trsegb9ZX8g1lhQUU6.W6Pq6tF3V2xcwpS.'
-// }]
-// var authTokens = {
-//     'd3854aa3-3b17-4003-86a0-e60b2da1c4c3': 'ryan@gladdenfamily.org',
-//     '9afe7c5d-9c10-486f-b518-7225730a634c': 'ryan@gladdenfamily.org'
-// }
-
 
 apiRouter.get("/soup", (req, res) => {
     res.send("joe MAMA")
@@ -145,8 +133,12 @@ apiRouter.get("/docs/:id/file", db.authenticated, db.requireAuth, (req, res) => 
         res.sendFile(filePath);
 })
 
-apiRouter.put("/docs/share", (req, res) => {
-
+apiRouter.put("/docs/share", db.authenticated, db.requireAuth, async (req, res) => {
+    console.log(req.body)
+    const collaborator = await db.getUser("email", req.body.email);
+    console.log(collaborator);
+    await db.addViewer(collaborator._id, req.body.id);
+    res.send("Shared")
 })
 
 apiRouter.get("/share/request", db.authenticated, db.requireAuth, async (req, res) =>{

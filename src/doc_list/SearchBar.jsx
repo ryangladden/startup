@@ -6,9 +6,6 @@ export default function SearchBar({upload}) {
         upload();
     }
 
-    function filterSearch(e) {
-        console.log(e.target.value)
-    }
 
     return (
         <div className="doc-list-header">
