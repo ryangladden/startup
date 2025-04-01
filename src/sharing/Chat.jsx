@@ -31,6 +31,12 @@ export default function Chat({user, hideChat, webSocket}) {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    React.useEffect(() => {
+        webSocket.addObserver((chat) => {
+            console.log(chat);
+        })
+    })
+
 
     return (
         <aside style={{height: '65vh', display: 'flex', flexDirection: 'column', border: '3px solid lightgrey', borderRadius: '20px', backgroundColor: 'white', margin: '10px', padding: '0'}}>

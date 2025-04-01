@@ -201,12 +201,16 @@ socketServer.on("connection", async (socket, request) => {
         socket.close()
     } else {
         addConnection(user, socket);
-        console.log(clients);
         console.log("Client authenticated")
 
         socket.on("message", (message) => {
             console.log("Message received");
             console.log(message);
+            for (const client of Object.keys(clients)) {
+                for (const conn of clients[client])
+                    conn.send(message);
+            }
+
         })
 
         socket.on("close", () => {
