@@ -9,7 +9,7 @@ const sampleMessages = [
     {sender: 'Joe Mama', time: '10:32', message: 'Yeah, I thought it was pretty cool', share: false},
 ]
 
-export default function Chat({user, disableChat}) {
+export default function Chat({user, hideChat, webSocket}) {
 
 
     const [currentMessage, setCurrentMessage] = React.useState('')
@@ -26,11 +26,6 @@ export default function Chat({user, disableChat}) {
         setCurrentMessage('');
     }
 
-    // setTimeout(() => {
-    //     const newMessage = {sender:'Joe Mama', message:'Check out this document', share: false, time: new Date().toLocaleTimeString()}
-    //     updateMessages([...messages, newMessage])
-    // }, 8000)
-
 
     React.useEffect(() => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -38,10 +33,10 @@ export default function Chat({user, disableChat}) {
 
 
     return (
-        <aside style={{height: '65vh', display: 'flex', flexDirection: 'column', border: '3px solid lightgrey', borderRadius: '20px', backgroundColor: 'white', margin: '20px', padding: '0'}}>
+        <aside style={{height: '65vh', display: 'flex', flexDirection: 'column', border: '3px solid lightgrey', borderRadius: '20px', backgroundColor: 'white', margin: '10px', padding: '0'}}>
             <div style={{flex: '0 0 20px', padding: '10px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid grey'}}>
-                <Button size='sm' style={{flexGrow: '0'}} onClick={disableChat}>Return</Button>
-                <h4 style={{flexGrow: '1', textAlign: 'center'}}>Chat with {user}</h4>
+                <Button size='sm' style={{flexGrow: '0'}} onClick={hideChat}>Return</Button>
+                <h5 style={{flexGrow: '1', textAlign: 'center'}}>Chat with {user.name}</h5>
                 </div>
             <div style={{flexGrow: '1',overflow: 'auto'}}>
                 {messages.map((msg, index) => formatMessage(msg, index))}
@@ -50,7 +45,7 @@ export default function Chat({user, disableChat}) {
             <div style={{flex: '0 0 80px', padding: '15px', borderTop: '1px solid grey'}}>
                 <Form style={{display: 'flex', flexDirection: 'row', gap: '10px', width: '340px'}}>
                     <Form.Control as='textarea' value={currentMessage} placeholder='Send a message...' onChange={(e)=> setCurrentMessage(e.target.value)}/>
-                    <Button onClick={sendMessage}>Send</Button>
+                    <Button onClick={() => webSocket.sendMessage("ryan@gladdenfamily.org", "Hey big dawg")}>Send</Button>
                 </Form>
             </div>
         </aside>

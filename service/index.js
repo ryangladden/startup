@@ -8,8 +8,6 @@ let apiRouter = express.Router();
 const db = require("./db");
 const s3 = require("./s3");
 
-
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -170,5 +168,51 @@ apiRouter.get("/share/collaborators", db.authenticated, db.requireAuth, async (r
     else { res.send([]) }
 })
 
-app.listen(port);
+server = app.listen(port);
 console.log("Listening on port " + port + "!");
+
+// ____________________-
+
+const { WebSocketServer } = require('ws');
+const socketServer = new WebSocketServer({ server });
+const cookie = require('cookie');
+
+var clients = {}
+
+function addConnection(user, socket) {
+    console.log(user);
+    if (clients[user.email]) {
+        clients[user.email].push(socket);
+    } else {
+        clients[user.email] = [socket]
+    }
+}
+
+
+socketServer.on("connection", async (socket, request) => {
+    var user = null;
+    const headers = cookie.parse(request.headers.cookie)
+    if (headers.token) {
+    user = await db.getAuth(headers.token);
+    }
+
+    if (user === null) {
+        console.log("Authentication failed");
+        socket.close()
+    } else {
+        addConnection(user, socket);
+        console.log(clients);
+        console.log("Client authenticated")
+
+        socket.on("message", (message) => {
+            console.log("Message received");
+            console.log(message);
+        })
+
+        socket.on("close", () => {
+            delete clients[user.email];
+            console.log("Disconnected");
+        })
+    }
+}
+) 

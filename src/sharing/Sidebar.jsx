@@ -3,13 +3,13 @@ import { Navbar, Button, Tab, Tabs } from 'react-bootstrap';
 import Collaborators from './Collaborators';
 import Requests from './Requests'
 
-export default function Sidebar() {
+export default function Sidebar({webSocket}) {
 
     return (
         <aside>
             <Tabs  defaultActiveKey="collaborators" className="mb-3">
                 <Tab eventKey="post" title="Post">Post Here</Tab>
-                <Tab eventKey="collaborators" title="Collaborators"><Collaborators /></Tab>
+                <Tab eventKey="collaborators" title="Collaborators"><Collaborators webSocket={webSocket}/></Tab>
                 <Tab eventKey="requests" title="Requests"><Requests /></Tab>
             </Tabs>
         </aside>

@@ -4,21 +4,11 @@ import Collaborators from './Collaborators';
 import Chat from './Chat';
 import { Navbar } from 'react-bootstrap';
 import Sidebar from './Sidebar';
+import ChatClient from './ChatClient';
 
 export function Sharing() {
 
-
-    const [showChat, setShowChat] = React.useState(false);
-    const [chatUser, setChatUser] = React.useState('')
-
-    function enableChat(e) {
-        setChatUser(e.target.value)
-        setShowChat(true);
-    }
-
-    function disableChat() {
-        setShowChat(false);
-    }
+    const [webSocket, configureWebSocket] = React.useState(new ChatClient())
 
     return (
     <main className='sharing'>
@@ -42,7 +32,7 @@ export function Sharing() {
         </div>
         </div>
     </section>
-    <Sidebar />
+    <Sidebar webSocket={webSocket}/>
     {/* {showChat ? <Chat user={chatUser} disableChat={()=>setShowChat(false)}/> : <Collaborators enableChat={enableChat}/>} */}
 </main>
   );
