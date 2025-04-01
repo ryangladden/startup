@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Form } from 'react-bootstrap'
 import CollaboratorCard from './CollaboratorCard';
+import Chat from './Chat';
 
 export default function Collaborators({enableChat}) {
 
@@ -25,13 +26,10 @@ export default function Collaborators({enableChat}) {
     }, [])
 
     return (
-    <div>
-    <h3>Your Collaborators</h3>
-    {collaborators.length === 0 ? (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) : collaborators.map((collaborator, index) => (<CollaboratorCard key={index} collaborator={collaborator.name} enableChat={enableChat} />))}
-    {/* <CollaboratorCard collaborator='Joe Mama' enableChat={enableChat}/>
-    <CollaboratorCard collaborator='Ryan Gladden' enableChat={enableChat}/>
-    <CollaboratorCard collaborator='Catherine de Burg' enableChat={enableChat}/>
-    <CollaboratorCard collaborator='Captain Jack Sparrow' enableChat={enableChat}/> */}
-    </div>
+    // <div>
+    //     <h3>Your Collaborators</h3>
+    //     {collaborators.length === 0 ? (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) : collaborators.map((collaborator, index) => (<CollaboratorCard key={index} collaborator={collaborator} enableChat={enableChat} />))}
+    // </div>
+    <Chat />
     )
 }

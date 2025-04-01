@@ -21,7 +21,7 @@ export default function Message( {sender, time, message, share} ) {
             <Card bg={cardColor} text='light' style={{maxWidth: '75%', margin: '5px', padding: '0'}}>
                 <Card.Header style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', }}>
-                        <Image roundedCircle src="icon.webp" height='35px'></Image>
+                        {/* <Image roundedCircle src="icon.webp" height='35px'></Image> */}
                         <Card.Title style={{fontSize: '12pt'}}>{sender}</Card.Title>
                     </div>
                     <Card.Subtitle style={{fontSize: '10pt'}}>{time}</Card.Subtitle>

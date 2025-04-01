@@ -32,7 +32,7 @@ export default function DocCard(props) {
         <Card.Body>
             <Card.Title style={{fontSize: 17}}>{title}</Card.Title>
             <Card.Text style={{fontSize: 15}}>Author: {author}</Card.Text>
-            <Card.Text style={{fontSize: 15}}>{date.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</Card.Text>
+            <Card.Text style={{fontSize: 15}}>{new Date(date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</Card.Text>
             <br/>
             {/* <Card.Link to="/sharing">Share</Card.Link> */}
             <Dropdown>

@@ -4,13 +4,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
 let apiRouter = express.Router();
-const cards = require('./docs.json');
-const auth = require("./auth");
-const docs = require("./docs");
+// const auth = require("./auth");
 const db = require("./db");
 const s3 = require("./s3");
-const paths = require("./paths.json");
-const path = require("path");
 
 
 
@@ -18,6 +14,15 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 app.use(`/api`, apiRouter);
+
+
+async function setAuthCookie(res, authToken) {
+    res.cookie('token', authToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'strict',
+    });
+  }
 
 
 apiRouter.get("/soup", (req, res) => {
@@ -48,7 +53,7 @@ apiRouter.post("/user", async (req, res) => {
             return res.status(403).send("Error: user exists");
         }
         const login = await db.login(email, password);
-        auth.setAuthCookie(res, login.token);
+        setAuthCookie(res, login.token);
         res.send({email: email, name: name});
     } catch(error) {
     return res.status(500).send("Error: internal server error");
@@ -63,7 +68,7 @@ apiRouter.post("/session", async (req, res) => {
         }
         const loginResult = await db.login(email, password);
         if (loginResult) {
-            auth.setAuthCookie(res, loginResult.token);
+            setAuthCookie(res, loginResult.token);
             res.send({email: email, name: loginResult.name});
         } else {
             res.status(403).send("Error: unauthorized")
@@ -128,13 +133,6 @@ apiRouter.get("/docs/:id", db.authenticated, db.requireAuth, async (req, res) =>
     document.role = role.role;
     document.owner = owner.email;
     res.send(JSON.stringify(document));
-})
-
-apiRouter.get("/docs/:id/file", db.authenticated, db.requireAuth, (req, res) => {
-        const docId = req.params.id;
-        const document = docs.getFileFromId(paths, docId);
-        const filePath = path.join(__dirname, "../public/pdfs", document.path);
-        res.sendFile(filePath);
 })
 
 apiRouter.put("/docs/share", db.authenticated, db.requireAuth, async (req, res) => {

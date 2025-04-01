@@ -26,10 +26,10 @@ export default function Chat({user, disableChat}) {
         setCurrentMessage('');
     }
 
-    setTimeout(() => {
-        const newMessage = {sender:'Joe Mama', message:'Check out this document', share: false, time: new Date().toLocaleTimeString()}
-        updateMessages([...messages, newMessage])
-    }, 8000)
+    // setTimeout(() => {
+    //     const newMessage = {sender:'Joe Mama', message:'Check out this document', share: false, time: new Date().toLocaleTimeString()}
+    //     updateMessages([...messages, newMessage])
+    // }, 8000)
 
 
     React.useEffect(() => {
@@ -38,7 +38,7 @@ export default function Chat({user, disableChat}) {
 
 
     return (
-        <aside style={{height: '80vh', display: 'flex', flexDirection: 'column', border: '3px solid lightgrey', borderRadius: '20px', backgroundColor: 'white', margin: '20px', padding: '0'}}>
+        <aside style={{height: '65vh', display: 'flex', flexDirection: 'column', border: '3px solid lightgrey', borderRadius: '20px', backgroundColor: 'white', margin: '20px', padding: '0'}}>
             <div style={{flex: '0 0 20px', padding: '10px', fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid grey'}}>
                 <Button size='sm' style={{flexGrow: '0'}} onClick={disableChat}>Return</Button>
                 <h4 style={{flexGrow: '1', textAlign: 'center'}}>Chat with {user}</h4>
