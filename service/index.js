@@ -121,8 +121,12 @@ apiRouter.post("/docs/upload", db.authenticated, db.requireAuth, s3.upload.singl
 apiRouter.get("/docs/:id", db.authenticated, db.requireAuth, async (req, res) => {
     const docId = req.params.id;
     var document = await db.getDocumentById(docId);
+    const role = await db.getUserRole(req.user.user_id, docId);
     const url = await s3.generateUrl(document.key)
+    const owner = await db.getDocOwner(docId);
     document.key = url;
+    document.role = role.role;
+    document.owner = owner.email;
     res.send(JSON.stringify(document));
 })
 

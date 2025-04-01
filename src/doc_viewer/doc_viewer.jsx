@@ -1,6 +1,6 @@
 import React from 'react';
 import './doc_viewer.css';
-import Card from 'react-bootstrap/Card';
+import { Dropdown, Card, Button } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { key } from './key.json';
 
@@ -15,11 +15,30 @@ const placeholder = {
 
 export function DocViewer() {
 
+        const [collabList, setCollabList] = React.useState([])
+    
+        React.useEffect(() => {
+            async function getCollabs() {
+            const collaborators = await getCollaborators()
+            console.log(collaborators)
+            setCollabList(collaborators);
+            }
+            getCollabs();
+        }, [])
+    
+        async function getCollaborators() {
+            const response = await fetch("/api/share/collaborators", {
+                method: "get"
+            })
+            return await response.json();
+        }
+
     const navigate = useNavigate();
 
     const { id } = useParams();
     const [metadata, setMetadata] = React.useState(placeholder)
-    const [inHistory, setInHistory] = React.useState("Loading...")
+    const [inHistory, setInHistory] = React.useState({year: "", text: ""})
+    
 
     React.useEffect( () => {
         async function fetchData() {
@@ -36,19 +55,18 @@ export function DocViewer() {
     React.useEffect( () => {
         async function fetchData() {
             const date = new Date(metadata.date);
-            console.log(date.getFullYear())
-            console.log(date.getDate())
-            console.log(date.getMonth())
-            const response = await fetch(`https://api.api-ninjas.com/v1/historicalevents?day=${date.getDate() + 1}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`, {
+            let month = String(date.getMonth() + 1).padStart(2,'0');
+            let day = String(date.getDate()).padStart(2,'0');
+            let url = `https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/${month}/${day}`;
+            console.log(url);
+            const response = await fetch(url, {
                 method: "get",
-                headers: {
-                    'X-Api-Key': key
-                }
-
             })
             const data = await response.json();
-            if (data[0]) {
-                setInHistory(data[0].event)
+            const years = data.selected.map((event) => event.year)
+            console.log(years)
+            if (data.selected[0]) {
+                setInHistory({year: data.selected[1].year, text: data.selected[1].text})
             } else {
                 setInHistory("No historical events for this day.")
             }
@@ -58,17 +76,32 @@ export function DocViewer() {
         }
     }, [metadata])
 
-    function splitTags(metadata) {
-        const tags = metadata.tags
-        return tags.split(',');
+    async function shareDoc(email) {
+        const response = await fetch("/api/docs/share", {
+            method: "put",
+            body: JSON.stringify({
+                id: _id,
+                email: email
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
     }
 
   return (
     <main className='container-fluid'>
-      <span id="return">
-            <button className="btn btn-primary" onClick={() => navigate(-1)}>
+      <span style={{display: "flex", flexDirection: "row", gap: "15px"}} id="return">
+            <button className="btn btn-secondary" onClick={() => navigate(-1)}>
                 Return to list
             </button>
+            {metadata.role !== "owner" && <Dropdown>
+                <Dropdown.Toggle>Share with...</Dropdown.Toggle>
+                <Dropdown.Menu>
+                {collabList.map((collaborator) => (<Dropdown.Item onClick={() => shareDoc(collaborator.email)} value={collaborator.email}>{collaborator.email}</Dropdown.Item>))}
+                </Dropdown.Menu>
+            </Dropdown>}
+            {metadata.role === "owner" && <p className="text-muted">{metadata.owner} shared this document with you.</p>}
         </span>
         <div className="doc-data container-fluid">
             <div className="viewer">
@@ -81,7 +114,7 @@ export function DocViewer() {
                 <div className="metadata">
                     <div className="date">
                         <img src="/calendar.svg" width="30"/>
-                        <p>{metadata.date}</p>
+                        <p>{new Date(metadata.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
                     </div>
                     <div className="date">
                         <img src="/map.svg" width="30"/>
@@ -93,13 +126,13 @@ export function DocViewer() {
                     </div>
                     <div className="tags">
                         <h4>Tags</h4>
-                            {/* {metadata.tags.split(',').map((tag) => <button>{tag}</button>)} */metadata.tags}
+                            {metadata.tags.map((tag) => <Button style={{margin: "3px"}} variant={'warning'}>{tag}</Button>)}
                     </div>
                       <Card>
                         <Card.Header>
-                        <Card.Title>In History</Card.Title>
+                        <Card.Title>In History - {inHistory.year}</Card.Title>
                         </Card.Header>
-                        <Card.Body><Card.Text>{inHistory}</Card.Text></Card.Body>
+                        <Card.Body><Card.Text>{inHistory.text}</Card.Text></Card.Body>
                       </Card>
                 </div>
                 {/* <div className="activity">

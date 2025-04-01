@@ -245,6 +245,17 @@ async function getUserDocuments(email, authors, dates, roles) {
   return joinOwnerAndDocs(owners, docList);
 }
 
+async function getUserRole(userId, docId) {
+  const ownership = await ownerCollection.findOne({user_id: userId, document_id: new ObjectId(docId)});
+  return ownership;
+}
+
+async function getDocOwner(docId) {
+  const owner = await ownerCollection.findOne({document_id: new ObjectId(docId), role: "owner"});
+
+  return getUser("_id", owner.user_id);
+}
+
 // sharing functions
 
 async function addViewer(userId, docId) {
@@ -257,14 +268,12 @@ async function addViewer(userId, docId) {
 
 async function getShareRequests(userId) {
   requests = await collabRequestCollection.find({recipient: userId}).toArray();
-  console.log(requests);
   users = await userCollection.find({_id: {$in: requests.map((request) => request.sender)}}).toArray();
   return users.map((user) => ({name: user.name, email: user.email}));
 }
 
 async function collabRequest(userId, collabEmail) {
   const collaborator = await getUser("email", collabEmail);
-  console.log(collaborator);
   if (collaborator) {
     await collabRequestCollection.insertOne({
       sender: userId,
@@ -274,10 +283,8 @@ async function collabRequest(userId, collabEmail) {
 }
 
 async function acceptRequest(userId, collabEmail) {
-  console.log("ACCEPTED BROTHER")
   const sender = await getUser("email", collabEmail);
   const request = await collabRequestCollection.findOneAndDelete({sender: sender._id, recipient: userId})
-  console.log(request);
   await collabCollection.updateOne(
     { user_id: userId },
     { $addToSet: { collaborators: sender._id} },
@@ -337,4 +344,6 @@ module.exports = {
   denyRequest,
   getShareRequests,
   addViewer,
+  getUserRole,
+  getDocOwner,
 }
