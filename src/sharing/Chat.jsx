@@ -13,18 +13,19 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
 
 
     const [currentMessage, setCurrentMessage] = React.useState('')
-    const [messages, updateMessages] = React.useState(conversation)
+    // const [messages, updateMessages] = React.useState(conversation.messages)
     const messageEndRef = React.useRef(null);
 
+    React.useEffect(() => console.log(conversation), [])
+
     function formatMessage(obj, key) {
-        console.log(obj.time);
-        return (<Message sender={obj.sender} message={obj.message} share={obj.share} time={obj.time} key={key}/>)
+        console.log(obj)
+        obj.sender = obj.sender === user.email ? user.name : "You"
+        return (<Message sender={obj.sender} message={obj.message} time={obj.time} key={key}/>)
     }
 
     function sendMessage() {
-        console.log(messages);
         var newMessage = {receiver: user.email, message: currentMessage, time: Date.now()};
-        console.log(newMessage);
         webSocket.sendMessage(newMessage)
         newMessage.sender = "You";
         updateMessages([...messages, newMessage])
@@ -32,15 +33,15 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
     }
 
 
-    React.useEffect(() => {
-        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    // React.useEffect(() => {
+    //     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // }, [messages]);
 
-    React.useEffect(() => {
-        webSocket.addObserver((chat, other, other2) => {
-            console.log(chat);
-        })
-    })
+    // React.useEffect(() => {
+    //     webSocket.addObserver((chat, other, other2) => {
+    //         console.log(chat);
+    //     })
+    // })
 
 
     return (
@@ -50,7 +51,7 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
                 <h5 style={{flexGrow: '1', textAlign: 'center'}}>Chat with {user.name}</h5>
                 </div>
             <div style={{flexGrow: '1',overflow: 'auto'}}>
-                {messages.map((msg, index) => formatMessage(msg, index))}
+                {conversation.messages.map((msg, index) => formatMessage(msg, index))}
                 <div ref={messageEndRef} />
             </div>
             <div style={{flex: '0 0 80px', padding: '15px', borderTop: '1px solid grey'}}>

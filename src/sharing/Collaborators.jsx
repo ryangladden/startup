@@ -21,20 +21,19 @@ export default function Collaborators({webSocket}) {
         const response = await fetch("/api/share/collaborators/messages", {
             method: "get"
         })
-        console.log("Getting messages...")
-        console.log(await response.json())
+        return await response.json();
     }
 
     function filterMessages(collaborator) {
-        return messages.filter((chat) => chat.users.includes(collaborator));
+        return messages.find((chat) => chat.users.includes(collaborator));
     }
 
     React.useEffect(() => {
         async function fetchData() {
             const messageArray = await getMessages();
+            setMessages(messageArray);
             const response = await getCollaborators();
             const collaborators = await response.json();
-            console.log(collaborators);
             setCollaborators(collaborators);
         }
         fetchData();
