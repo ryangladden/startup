@@ -15,6 +15,30 @@ export default function Message( {sender, time, message, share} ) {
         </>
     )
 
+       function formatDate(dateObj) {
+            const date = new Date(dateObj);
+            const today = Date.now()
+            if (datesAreOnSameDay(Date.now(), date)) {
+                return `${date.getHours()}:${date.getMinutes()}`
+            } else if (datesAreInSameWeek(date, today)) {
+                return `${date.toLocaleDateString([], { weekday: "long"})} ${date.getHours()}:${date.getMinutes()}`
+            } 
+            return `${date.toLocaleDateString([], { year: "numeric", month: "long", day: "numeric" })} ${date.getHours()}:${date.getMinutes()}`
+    
+        }
+    
+        function datesAreOnSameDay(day1, day2) {
+            const a = new Date(day1);
+            const b = new Date(day2)
+            return a.getFullYear() === b.getFullYear() 
+            && a.getMonth() === b.getMonth()
+            && a.getDate() === b.getDate()
+        }
+    
+        function datesAreInSameWeek(day1, day2) {
+            return Number(day1) - Number(day2) <= 604800000;
+        }
+
 
     return (
         <div  style={{display: 'flex', justifyContent: margins}}>
@@ -24,7 +48,7 @@ export default function Message( {sender, time, message, share} ) {
                         {/* <Image roundedCircle src="icon.webp" height='35px'></Image> */}
                         <Card.Title style={{fontSize: '12pt'}}>{sender}</Card.Title>
                     </div>
-                    <Card.Subtitle style={{fontSize: '10pt'}}>{time}</Card.Subtitle>
+                    <Card.Subtitle style={{fontSize: '10pt'}}>{formatDate(time)}</Card.Subtitle>
 
                 </Card.Header>
                 <Card.Body>

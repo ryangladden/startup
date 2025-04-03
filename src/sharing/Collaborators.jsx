@@ -8,6 +8,7 @@ export default function Collaborators({webSocket}) {
     const [collaborators, setCollaborators] = React.useState([])
     const [showChat, toggleShowChat] = React.useState(false);
     const [chatPartner, setChatPartner] = React.useState("");
+    const [messages, setMessages] = React.useState([]);
 
     async function getCollaborators() {
         const response = await fetch("/api/share/collaborators", {
@@ -16,12 +17,24 @@ export default function Collaborators({webSocket}) {
         return response;
     }
 
+    async function getMessages() {
+        const response = await fetch("/api/share/collaborators/messages", {
+            method: "get"
+        })
+        console.log("Getting messages...")
+        console.log(await response.json())
+    }
+
+    function filterMessages(collaborator) {
+        return messages.filter((chat) => chat.users.includes(collaborator));
+    }
+
     React.useEffect(() => {
         async function fetchData() {
+            const messageArray = await getMessages();
             const response = await getCollaborators();
             const collaborators = await response.json();
-
-            console.log(collaborators)
+            console.log(collaborators);
             setCollaborators(collaborators);
         }
         fetchData();
@@ -31,7 +44,7 @@ export default function Collaborators({webSocket}) {
     <div>
         {!showChat && <h3>Your Collaborators</h3>}
         {showChat ? 
-        (<Chat hideChat={() => toggleShowChat(false)} webSocket={webSocket} user={chatPartner}/>) : 
+        (<Chat conversation={filterMessages(chatPartner.email)} hideChat={() => toggleShowChat(false)} webSocket={webSocket} user={chatPartner}/>) : 
         (collaborators.length === 0 ?
         (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) :
         collaborators.map((collaborator, index) => (<CollaboratorCard key={index} collaborator={collaborator} enableChat={() => {toggleShowChat(true); setChatPartner(collaborator)}}/>)))}

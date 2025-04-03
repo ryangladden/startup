@@ -12,6 +12,7 @@ const ownerCollection = db.collection('ownership');
 const authCollection = db.collection('auth');
 const collabCollection = db.collection('collaborators');
 const collabRequestCollection = db.collection('collabRequests');
+const messageCollection = db.collection('messages');
 
 
 // User operations
@@ -284,7 +285,9 @@ async function collabRequest(userId, collabEmail) {
 
 async function acceptRequest(userId, collabEmail) {
   const sender = await getUser("email", collabEmail);
+  const receiverEmail = await getUser("_id", userId)
   const request = await collabRequestCollection.findOneAndDelete({sender: sender._id, recipient: userId})
+  createChat(receiverEmail.email, collabEmail);
   await collabCollection.updateOne(
     { user_id: userId },
     { $addToSet: { collaborators: sender._id} },
@@ -299,7 +302,7 @@ async function acceptRequest(userId, collabEmail) {
 
 async function denyRequest(userId, collabEmail) {
   const sender = await getUser("email", collabEmail);
-  const request = collabRequestCollection.findOneAndDelete({sender: sender._id, user_id: userId})
+  const request = await collabRequestCollection.findOneAndDelete({sender: sender._id, user_id: userId})
 }
 
 async function getCollaborators(userId) {
@@ -312,16 +315,24 @@ async function getCollaborators(userId) {
   return null;
 }
 
-// async function addCollaborator(req, res, next) {
-//   if (req.body.email === req.user.email) {
-//     return res.status(403).send("Cannot add self as collaborator")
-//   }
-//   const collaboratorId = await getUser("email", req.body.email);
-//   if (collaboratorId) {
-//     collabCollection.updateMany({user_id: req.user.user_id, $addToSet: {collaborators: collaboratorId}})
-//   }
-//   next();
-// }
+// messages
+
+async function createChat(email1, email2) {
+  const chat = {users: [email1, email2], messages: []}
+  await messageCollection.insertOne(chat);
+}
+
+async function addMessage(message) {
+  const messages = await messageCollection.findOneAndUpdate({users: { $all: [message.sender, message.receiver]}}, { $push: { messages: message}} )
+  console.log(messages)
+  return messages;
+}
+
+async function getMessages(email) {
+  const messages = await messageCollection.find( {users: { $in: [email] } } ).toArray();
+  console.log(messages);
+  return messages;
+}
 
 module.exports = {
   getUserDocuments,
@@ -346,4 +357,6 @@ module.exports = {
   addViewer,
   getUserRole,
   getDocOwner,
+  addMessage,
+  getMessages
 }

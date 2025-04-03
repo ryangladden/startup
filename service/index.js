@@ -168,6 +168,11 @@ apiRouter.get("/share/collaborators", db.authenticated, db.requireAuth, async (r
     else { res.send([]) }
 })
 
+apiRouter.get("/share/collaborators/messages", db.authenticated, db.requireAuth, async (req,res) => {
+    const messages = await db.getMessages(req.user.email);
+    res.send(messages);
+})
+
 server = app.listen(port);
 console.log("Listening on port " + port + "!");
 
@@ -180,7 +185,6 @@ const cookie = require('cookie');
 var clients = {}
 
 function addConnection(user, socket) {
-    console.log(user);
     if (clients[user.email]) {
         clients[user.email].push(socket);
     } else {
@@ -203,18 +207,22 @@ socketServer.on("connection", async (socket, request) => {
         addConnection(user, socket);
         console.log("Client authenticated")
 
-        socket.on("message", (message) => {
+        socket.on("message", async (data) => {
             console.log("Message received");
-            console.log(message);
-            for (const client of Object.keys(clients)) {
-                for (const conn of clients[client])
-                    conn.send(message);
-            }
-
-        })
+            const message = JSON.parse(data).name;
+            if (clients[message.receiver]) {
+            for (const conn of clients[message.receiver]) {
+                console.log("User connected via websocket")
+                conn.send(message.msg);
+        }}
+        message.sender = user.email;
+        console.log(message)
+        db.addMessage(message);
+    })
 
         socket.on("close", () => {
-            delete clients[user.email];
+            const current = clients[user.email].indexOf(socket);
+            clients[user.email].splice(current, 1);
             console.log("Disconnected");
         })
     }
