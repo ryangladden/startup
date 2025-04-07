@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./app.css";
-import { NavLink, BrowserRouter, Route, Routes, } from 'react-router-dom';
+import { NavLink, HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { Login } from './login/Login'
 import { DocList } from './doc_list/DocListPage';
 import { DocViewer } from './doc_viewer/doc_viewer';
@@ -20,13 +20,13 @@ export default function App() {
     }
 
     const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
-    const [authenticated, setAuthentication] = React.useState(false);
+    const [authenticated, setAuthentication] = React.useState(localStorage.getItem('currentUser') ? true : false);
     
     React.useEffect( () => {
         isAuthenticated()}, []);
 
     return (
-    <BrowserRouter>
+    <HashRouter>
       <div className='body'>
         <header className="sticky-top container-fluid">
             <nav className="navbar">
@@ -35,17 +35,23 @@ export default function App() {
                     <li className="nav-item"><NavLink className="nav-link" to="">Login</NavLink></li>
                     {authenticated && <li className="nav-item"><NavLink className="nav-link" to="docs">Documents</NavLink></li>}
                     {authenticated && <li className="nav-item"><NavLink className="nav-link" to="sharing">Sharing</NavLink></li>}
-                    <li className="nav-item"><NavLink className="nav-link" to="about">About</NavLink></li>
+                    <li className="nav-item"><NavLink className="nav-link" to="/about">About</NavLink></li>
                 </menu>
             </nav>
         </header>
         <div>
         <Routes>
-            <Route path='/' element={<Login userName={userName} authState={authenticated} setAuthState={(state)=>setAuthentication(state)}/>} />
-            {authenticated && <Route path='/docs' element={<DocList />} />}
-            <Route path='/about' element={<About />} />
-            {authenticated && <Route path='/sharing' element={<Sharing />} />}
-            {authenticated && <Route path='/docs/:id' element={<DocViewer />} />}
+            {/* <Route path="/" element={<Login userName={userName} authState={authenticated} setAuthState={setAuthentication} />} />
+            <Route path="/docs" element={authenticated ? <DocList /> : (console.log("You can't be here rn brotha"), <Navigate to="/" />)} />
+            <Route path="/about" element={<About />} />
+            <Route path="/sharing" element={authenticated ? <Sharing /> : <Navigate to="/" />} />
+            <Route path="/docs/:id" element={authenticated ? <DocViewer /> : <Navigate to="/" />} /> */}
+            <Route path="/" element={<Login userName={userName} authState={authenticated} setAuthState={setAuthentication} />} exact />
+            <Route path="/docs" element={authenticated ? <DocList /> : (console.log("You can't be here rn brotha"), <Navigate to="/" />)} />
+            <Route path="/about" element={<About />} />
+            <Route path="/sharing" element={authenticated ? <Sharing /> : <Navigate to="/" />} />
+            <Route path="/docs/:id" element={authenticated ? <DocViewer /> : <Navigate to="/" />} />
+            <Route path='*' element={<p>Page not found</p>} />
         </Routes>
         </div>
         <footer className="container-fluid ">
@@ -56,6 +62,6 @@ export default function App() {
         </div>
     </footer>
       </div> 
-      </BrowserRouter>
+      </HashRouter>
 );
 }

@@ -1,16 +1,16 @@
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-const express = require('express');
 const cookieParser = require('cookie-parser');
+const express = require('express');
 const app = express();
-let apiRouter = express.Router();
-// const auth = require("./auth");
 const db = require("./db");
 const s3 = require("./s3");
+
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
+
+const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 
@@ -173,8 +173,10 @@ apiRouter.get("/share/collaborators/messages", db.authenticated, db.requireAuth,
     res.send(messages);
 })
 
-server = app.listen(port);
-console.log("Listening on port " + port + "!");
+const server = app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});
+// console.log("Listening on port " + port + "!");
 
 // ____________________-
 

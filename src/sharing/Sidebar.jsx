@@ -9,7 +9,7 @@ export default function Sidebar({webSocket}) {
         <aside>
             <Tabs  defaultActiveKey="collaborators" className="mb-3">
                 <Tab eventKey="post" title="Post">Post Here</Tab>
-                <Tab eventKey="collaborators" title="Collaborators"><Collaborators webSocket={webSocket}/></Tab>
+                <Tab style={{fontColor: 'red'}}eventKey="collaborators" title="Collaborators"><Collaborators webSocket={webSocket}/></Tab>
                 <Tab eventKey="requests" title="Requests"><Requests /></Tab>
             </Tabs>
         </aside>

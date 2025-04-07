@@ -2,13 +2,6 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Message from './Message';
 
-const sampleMessages = [
-    {sender: 'You', time: new Date("2025-04-03T09:30:00"), share: true, message: ''},
-    {sender: 'Joe Mama', time: new Date("2025-04-01T12:00:00"), message: 'Hey, how are you doing?', share: false},
-    {sender: 'You', time: new Date("2025-03-26T15:45:00"), message: 'Not much, did you check out that document I sent you?', share: false},
-    {sender: 'Joe Mama', time: new Date("2025-03-03T08:15:00"), message: 'Yeah, I thought it was pretty cool', share: false},
-]
-
 export default function Chat({user, hideChat, webSocket, conversation}) {
 
 
@@ -17,13 +10,11 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
     const messageEndRef = React.useRef(null);
 
     function formatMessage(obj, key) {
-        console.log(obj);
         const sender = obj.sender === user.email ? user.name : "You"
         return (<Message sender={sender} message={obj.message} time={obj.time} key={key}/>)
     }
 
     function sendMessage() {
-        console.log(document.forms['newMessageForm'].elements)
         const currentMessage = document.forms['newMessageForm'].elements['newMessage'].value;
         var newMessage = {receiver: user.email, message: currentMessage, time: Date.now()};
         webSocket.sendMessage(newMessage)
