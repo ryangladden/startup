@@ -199,31 +199,25 @@ socketServer.on("connection", async (socket, request) => {
     if (headers.token) {
     user = await db.getAuth(headers.token);
     }
-
     if (user === null) {
-        console.log("Authentication failed");
         socket.close()
     } else {
         addConnection(user, socket);
-        console.log("Client authenticated")
+
 
         socket.on("message", async (data) => {
-            console.log("Message received");
             const message = JSON.parse(data).name;
+            message.sender = user.email;
             if (clients[message.receiver]) {
-            for (const conn of clients[message.receiver]) {
-                console.log("User connected via websocket")
-                conn.send(message.msg);
-        }}
-        message.sender = user.email;
-        console.log(message)
+                for (const conn of clients[message.receiver]) {
+                    conn.send(JSON.stringify(message));
+            }}
         db.addMessage(message);
     })
 
         socket.on("close", () => {
             const current = clients[user.email].indexOf(socket);
             clients[user.email].splice(current, 1);
-            console.log("Disconnected");
         })
     }
 }

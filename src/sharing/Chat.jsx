@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import Message from './Message';
 
 const sampleMessages = [
@@ -13,35 +13,37 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
 
 
     const [currentMessage, setCurrentMessage] = React.useState('')
-    // const [messages, updateMessages] = React.useState(conversation.messages)
+    const [messages, updateMessages] = React.useState(conversation.messages)
     const messageEndRef = React.useRef(null);
 
-    React.useEffect(() => console.log(conversation), [])
-
     function formatMessage(obj, key) {
-        console.log(obj)
-        obj.sender = obj.sender === user.email ? user.name : "You"
-        return (<Message sender={obj.sender} message={obj.message} time={obj.time} key={key}/>)
+        console.log(obj);
+        const sender = obj.sender === user.email ? user.name : "You"
+        return (<Message sender={sender} message={obj.message} time={obj.time} key={key}/>)
     }
 
     function sendMessage() {
+        console.log(document.forms['newMessageForm'].elements)
+        const currentMessage = document.forms['newMessageForm'].elements['newMessage'].value;
         var newMessage = {receiver: user.email, message: currentMessage, time: Date.now()};
         webSocket.sendMessage(newMessage)
+        document.forms['newMessageForm'].elements['newMessage'].value = ''
         newMessage.sender = "You";
-        updateMessages([...messages, newMessage])
+        updateMessages([...messages, newMessage]);
         setCurrentMessage('');
     }
 
 
-    // React.useEffect(() => {
-    //     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // }, [messages]);
+    React.useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
-    // React.useEffect(() => {
-    //     webSocket.addObserver((chat, other, other2) => {
-    //         console.log(chat);
-    //     })
-    // })
+    React.useEffect(() => {
+        webSocket.addObserver((event) => {
+            const message = event.msg
+            updateMessages([...messages, message])
+        })
+    })
 
 
     return (
@@ -51,12 +53,12 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
                 <h5 style={{flexGrow: '1', textAlign: 'center'}}>Chat with {user.name}</h5>
                 </div>
             <div style={{flexGrow: '1',overflow: 'auto'}}>
-                {conversation.messages.map((msg, index) => formatMessage(msg, index))}
+                {messages.map((msg, index) => formatMessage(msg, index))}
                 <div ref={messageEndRef} />
             </div>
             <div style={{flex: '0 0 80px', padding: '15px', borderTop: '1px solid grey'}}>
-                <Form style={{display: 'flex', flexDirection: 'row', gap: '10px', width: '340px'}}>
-                    <Form.Control as='textarea'  placeholder='Send a message...' onChange={(e)=> setCurrentMessage(e.target.value)}/>
+                <Form style={{display: 'flex', flexDirection: 'row', gap: '10px', width: '340px'}} name="newMessageForm">
+                    <Form.Control as='textarea' name='newMessage' placeholder='Send a message...'/>
                     <Button onClick={() => sendMessage()}>Send</Button>
                 </Form>
             </div>

@@ -324,13 +324,11 @@ async function createChat(email1, email2) {
 
 async function addMessage(message) {
   const messages = await messageCollection.findOneAndUpdate({users: { $all: [message.sender, message.receiver]}}, { $push: { messages: message}} )
-  console.log(messages)
   return messages;
 }
 
 async function getMessages(email) {
   const messages = await messageCollection.find( {users: { $in: [email] } } ).toArray();
-  console.log(messages);
   return messages;
 }
 

@@ -9,17 +9,6 @@ export default function LoginForm( { showModal, setLoggedIn, showError } ) {
         const [email, setEmail] = React.useState('');
         const [password, setPassword] = React.useState('');
 
-        // async function login(e) {
-        //     console.log("Logging in");
-        //     const response = await fetch("/api/user", {
-        //         method: "get",
-        //         body: JSON.stringify({name: varName, password: varPassword}),
-        //         headers: {
-        //             'Content-type': 'application/json; charset=UTF-8',
-        //         },
-        //     })
-        // }
-
         async function login(e) {
             const response = await fetch("/api/session", {
                 method: 'post',
@@ -28,9 +17,8 @@ export default function LoginForm( { showModal, setLoggedIn, showError } ) {
                     'Content-type': 'application/json; charset=UTF-8',
                 }
             })
-            const res = await response;
-            const data = res.json()
-            if (res.status === 200) {
+            const data = await response.json()
+            if (response.status === 200) {
                 localStorage.setItem('currentUser', data.name);
                 setLoggedIn(true);
             } else {

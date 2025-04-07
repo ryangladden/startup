@@ -17,9 +17,9 @@ export default class ChatClient {
   
       // Display messages we receive from our friends
       this.socket.onmessage = async (event) => {
-        const text = await event.data.text();
+        const text = await event.data;
         const chat = JSON.parse(text);
-        this.notifyObservers('received', chat.name, chat.msg);
+        this.notifyObservers('received', chat.sender, chat);
       };
   
       // If the webSocket is closed then disable the interface
@@ -37,7 +37,6 @@ export default class ChatClient {
   
     addObserver(observer) {
       this.observers.push(observer);
-      console.log(this.observers);
     }
   
     notifyObservers(event, from, msg) {
