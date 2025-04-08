@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 
 export default function RequestCard({ request, reload }) {
-    
+        const navigate = useNavigate();
         const [showCard, setShowCard] = React.useState(true)
 
         async function respondRequest(accept, email) {
@@ -18,7 +19,9 @@ export default function RequestCard({ request, reload }) {
                 }
             )
             setShowCard(false)
-            reload();
+            if (accept) {
+                navigate("/docs");
+            }
         }
     return (<>
         {showCard &&

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Form } from 'react-bootstrap'
 import CollaboratorCard from './CollaboratorCard';
 import Chat from './Chat';
 
