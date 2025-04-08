@@ -29,10 +29,9 @@ export default function PopUp( { uploadData, show, cancel } ) {
             method: 'post',
             body: prepareForm()
         });
-        if (response?.status === 200) {
-            navigate('/docs')
+        navigate("/docs");
+        cancel();
         }
-    }
 
     function parseTags(string) {
         return string.split(',').map(item => item.trim());

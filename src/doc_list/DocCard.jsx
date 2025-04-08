@@ -5,7 +5,7 @@ import { Dropdown, DropdownItem, DropdownToggle } from 'react-bootstrap';
 
 
 export default function DocCard(props) {
-    const { cover, title, author, date, _id } = props.data;
+    const { cover, title, author, date, _id, role } = props.data;
 
     function formatDate(date) {
         return new Date(date).toLocaleDateString();
@@ -24,6 +24,10 @@ export default function DocCard(props) {
         })
     }
 
+    React.useEffect(() => {
+        console.log(props);
+    }, [])
+
     return (
     <Card>
         <Link to={'/docs/' + _id}>
@@ -34,13 +38,14 @@ export default function DocCard(props) {
             <Card.Text style={{fontSize: 15}}>Author: {author}</Card.Text>
             <Card.Text style={{fontSize: 15}}>{new Date(date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</Card.Text>
             <br/>
+            {/* <p>{role}</p> */}
             {/* <Card.Link to="/sharing">Share</Card.Link> */}
-            <Dropdown>
+            {role === "owner" ? <Dropdown>
                 <Dropdown.Toggle>Share with...</Dropdown.Toggle>
                 <Dropdown.Menu>
                 {props.collaborators.map((collaborator) => (<Dropdown.Item onClick={() => shareDoc(collaborator.email)} value={collaborator.email}>{collaborator.email}</Dropdown.Item>))}
                 </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> : <Card.Text style={{fontSize: "14px"}}className="text-muted">Shared with you</Card.Text>}
         </Card.Body>
     </Card>
     );

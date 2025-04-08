@@ -199,7 +199,7 @@ socketServer.on("connection", async (socket, request) => {
     var user = null;
     const headers = cookie.parse(request.headers.cookie)
     if (headers.token) {
-    user = await db.getAuth(headers.token);
+        user = await db.getAuth(headers.token);
     }
     if (user === null) {
         socket.close()

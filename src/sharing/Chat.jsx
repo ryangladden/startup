@@ -6,7 +6,7 @@ export default function Chat({user, hideChat, webSocket, conversation}) {
 
 
     const [currentMessage, setCurrentMessage] = React.useState('')
-    const [messages, updateMessages] = React.useState(conversation.messages)
+    const [messages, updateMessages] = React.useState(conversation)
     const messageEndRef = React.useRef(null);
 
     function formatMessage(obj, key) {

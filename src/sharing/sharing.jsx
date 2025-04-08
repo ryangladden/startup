@@ -1,8 +1,5 @@
 import React from 'react';
 import './sharing.css'
-import Collaborators from './Collaborators';
-import Chat from './Chat';
-import { Navbar } from 'react-bootstrap';
 import Sidebar from './Sidebar';
 import ChatClient from './ChatClient';
 

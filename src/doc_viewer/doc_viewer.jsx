@@ -95,13 +95,13 @@ export function DocViewer() {
             <button className="btn btn-secondary" onClick={() => navigate(-1)}>
                 Return to list
             </button>
-            {metadata.role !== "owner" && <Dropdown>
+            {metadata.role === "owner" && <Dropdown>
                 <Dropdown.Toggle>Share with...</Dropdown.Toggle>
                 <Dropdown.Menu>
                 {collabList.map((collaborator) => (<Dropdown.Item onClick={() => shareDoc(collaborator.email)} value={collaborator.email}>{collaborator.email}</Dropdown.Item>))}
                 </Dropdown.Menu>
             </Dropdown>}
-            {metadata.role === "owner" && <p className="text-muted">{metadata.owner} shared this document with you.</p>}
+            {metadata.role !== "owner" && <p className="text-muted">{metadata.owner} shared this document with you.</p>}
         </span>
         <div className="doc-data container-fluid">
             <div className="viewer">

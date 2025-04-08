@@ -80,8 +80,10 @@ async function createAuth(user) {
 
 async function getAuth(authToken) {
   const user = await authCollection.findOne({token: authToken});
-  const id = await user.user_id;
+  if (user) {
   return await getUser("_id", user.user_id);
+  }
+  return null;
 }
 
 async function requireAuth(req, res, next) {
@@ -163,8 +165,11 @@ async function getDocuments(req) {
     const endDate = (new Number(filter.daterange[1]) + 1).toString()
     query.date = { $gte: startDate, $lt: endDate };
   }
-  const result = await docCollection.find(query).toArray();
-  return result;
+  const documents = await docCollection.find(query).toArray();
+  for (document of documents) {
+    document.role = ownership.find((doc) => doc.document_id.equals(document._id)).role;
+  }
+  return documents;
 }
 
 function getFilterFromQuery(req) {

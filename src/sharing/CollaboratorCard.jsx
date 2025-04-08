@@ -3,17 +3,17 @@ import {Card, Button, Dropdown} from 'react-bootstrap'
 
 export default function CollaboratorCard({collaborator, enableChat, activeNotifications}) {
 
-    const [hasNotification, setHasNotification] = React.useState(false);
+    // const [hasNotification, setHasNotification] = React.useState(false);
 
-    React.useEffect(() => {
-        if (activeNotifications.includes(collaborator.email)) {
-            setHasNotification(true);
-        }
-    }, [activeNotifications])
+    // React.useEffect(() => {
+    //     if (activeNotifications.includes(collaborator.email)) {
+    //         setHasNotification(true);
+    //     }
+    // }, [activeNotifications])
 
     function setChat() {
         enableChat();
-        setHasNotification(false);
+        activeNotifications[collaborator.email] = false;
     }
 
     return (
@@ -23,7 +23,7 @@ export default function CollaboratorCard({collaborator, enableChat, activeNotifi
             <Card.Subtitle className="text-muted">{collaborator.email}</Card.Subtitle>
         </Card.Body>
         <Card.Footer style={{display: "flex", flexDirection: "row", gap:"20px"}}>
-            <Button variant={hasNotification ? "danger" : "primary"} style={{margin: "1px"}}value={collaborator} onClick={() => setChat()}>{hasNotification ? "See New Messages" : " Send a Message "}</Button>
+            <Button variant={activeNotifications[collaborator.email] ? "danger" : "primary"} style={{margin: "1px"}}value={collaborator} onClick={() => setChat()}>{activeNotifications[collaborator.email] ? "See New Messages" : " Send a Message "}</Button>
                 <Dropdown>
                     <Dropdown.Toggle>Share doc</Dropdown.Toggle>
                     <Dropdown.Menu>
