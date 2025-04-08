@@ -30,7 +30,6 @@ export default function PopUp( { uploadData, show, cancel } ) {
             body: prepareForm()
         });
         navigate("/docs");
-        cancel();
         }
 
     function parseTags(string) {
@@ -91,7 +90,7 @@ export default function PopUp( { uploadData, show, cancel } ) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant='secondary' onClick={cancel}>Cancel</Button>
-                <Button variant='primary' onClick={upload}>Upload</Button>
+                <Button variant='primary' type="submit" onClick={upload}>Upload</Button>
             </Modal.Footer>
             </Form>
         </Modal>

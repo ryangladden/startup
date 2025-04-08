@@ -28,6 +28,7 @@ async function createUser(user) {
     const result = await userCollection.insertOne(user);
     const userId = result.insertedId;
     await collabCollection.insertOne({user_id: userId, collaborators: []})
+    addViewer(userId, "67f5b4336eaaa3e07bec3962")
     return userId;
   } catch(ex) {
     throw new Error("Internal server error");
@@ -335,8 +336,7 @@ async function createPost(userId, docId, text) {
 async function getPosts(userId) {
   const self = await getUser("_id", userId);
   const collaborators = await getCollaborators(userId);
-  collaborators.push(self);
-  console.log(collaborators);
+  collaborators.push(self); 
   const ids = collaborators.map((collaborator) => collaborator._id);
   ids.push(userId);
   const posts = await collabPostCollection.find({user_id: {$in: ids}}).toArray();

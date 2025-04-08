@@ -2,7 +2,7 @@ import React from 'react';
 import CollaboratorCard from './CollaboratorCard';
 import Chat from './Chat';
 
-export default function Collaborators({webSocket}) {
+export default function Collaborators({webSocket, documents}) {
 
     const [collaborators, setCollaborators] = React.useState([])
     const [showChat, toggleShowChat] = React.useState(false);
@@ -86,7 +86,7 @@ export default function Collaborators({webSocket}) {
         (<Chat conversation={messages[chatPartner.email]} hideChat={() => toggleShowChat(false)} webSocket={webSocket} user={chatPartner}/>) : 
         (collaborators.length === 0 ?
         (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) :
-        collaborators.map((collaborator, index) => (<CollaboratorCard activeNotifications={activeNotifications} key={index} collaborator={collaborator} enableChat={() => {toggleShowChat(true); setChatPartner(collaborator); removeActiveNotification(collaborator.email)}}/>)))}
+        collaborators.map((collaborator, index) => (<CollaboratorCard activeNotifications={activeNotifications} key={index} collaborator={collaborator} documents={documents} enableChat={() => {toggleShowChat(true); setChatPartner(collaborator); removeActiveNotification(collaborator.email)}}/>)))}
     </div>
 
     )

@@ -1,12 +1,13 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export default function Post({documents}) {
 
+    const navigate = useNavigate();
     const [docId, setDocId] = React.useState('');
 
     async function post() {
-        console.log(docId);
         const formElements = document.forms['postDocument'].elements;
         const response = await fetch("/api/share/post", {
             method: "post",
@@ -19,6 +20,7 @@ export default function Post({documents}) {
                 }
             }
         )
+        navigate("/sharing");
     }
 
 

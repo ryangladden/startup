@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, Button, Dropdown} from 'react-bootstrap'
 
-export default function CollaboratorCard({collaborator, enableChat, activeNotifications}) {
+export default function CollaboratorCard({collaborator, enableChat, activeNotifications, documents}) {
 
     // const [hasNotification, setHasNotification] = React.useState(false);
 
@@ -16,6 +16,19 @@ export default function CollaboratorCard({collaborator, enableChat, activeNotifi
         activeNotifications[collaborator.email] = false;
     }
 
+    async function shareDoc(id, email) {
+        const response = await fetch("/api/docs/share", {
+            method: "put",
+            body: JSON.stringify({
+                id: id,
+                email: email
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+    }
+
     return (
         <Card>
         <Card.Body>
@@ -27,7 +40,9 @@ export default function CollaboratorCard({collaborator, enableChat, activeNotifi
                 <Dropdown>
                     <Dropdown.Toggle>Share doc</Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item>Item</Dropdown.Item>
+                        {documents.map((doc) => (
+                            <Dropdown.Item key={doc._id} onClick={() => {shareDoc(doc._id, collaborator.email)}}>{doc.title}</Dropdown.Item>
+                        ))}
                     </Dropdown.Menu>
                 </Dropdown>
         </Card.Footer>
