@@ -55,3 +55,20 @@ aside {
 h3 {
     text-align: center;
 }
+
+.notification-tab {
+    background-color: red;
+    animation: notification;
+    animation-duration: .75s;
+    animation-iteration-count: 3;
+}
+
+@keyframes notification {
+    from {
+        background-color: red;
+    }
+
+    to {
+        background-color: none;
+    }
+}

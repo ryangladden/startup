@@ -9,6 +9,7 @@ export default function Collaborators({webSocket}) {
     const [showChat, toggleShowChat] = React.useState(false);
     const [chatPartner, setChatPartner] = React.useState("");
     const [messages, setMessages] = React.useState([]);
+    const [activeNotifications, addActiveNotification] = React.useState([])
 
     async function getCollaborators() {
         const response = await fetch("/api/share/collaborators", {
@@ -28,6 +29,16 @@ export default function Collaborators({webSocket}) {
         return messages.find((chat) => chat.users.includes(collaborator));
     }
 
+    function removeActiveNotification(email) {
+        console.log("REMOVING")
+        console.log(email);
+        console.log(activeNotifications);
+        const newNotifications = activeNotifications.filter((user) => email !== user);
+        console.log(newNotifications);
+        addActiveNotification(newNotifications);
+        console.log("REMOVED");
+    }
+
     React.useEffect(() => {
         async function fetchData() {
             const messageArray = await getMessages();
@@ -39,6 +50,14 @@ export default function Collaborators({webSocket}) {
         fetchData();
     }, [])
 
+    React.useEffect(() => {
+        webSocket.addObserver((e) => {
+            if (e.event === "received") {
+                addActiveNotification([...activeNotifications, e.from]);
+            }
+        })
+    }, [])
+
     return (
     <div>
         {!showChat && <h3>Your Collaborators</h3>}
@@ -46,7 +65,7 @@ export default function Collaborators({webSocket}) {
         (<Chat conversation={filterMessages(chatPartner.email)} hideChat={() => toggleShowChat(false)} webSocket={webSocket} user={chatPartner}/>) : 
         (collaborators.length === 0 ?
         (<><br/><p style={{fontStyle: 'italic'}} className="text-muted">You have no collaborators. Start sharing by adding collaborators in the Requests tab.</p></>) :
-        collaborators.map((collaborator, index) => (<CollaboratorCard key={index} collaborator={collaborator} enableChat={() => {toggleShowChat(true); setChatPartner(collaborator)}}/>)))}
+        collaborators.map((collaborator, index) => (<CollaboratorCard activeNotifications={activeNotifications} key={index} collaborator={collaborator} enableChat={() => {toggleShowChat(true); setChatPartner(collaborator); removeActiveNotification(collaborator.email)}}/>)))}
     </div>
 
     )
