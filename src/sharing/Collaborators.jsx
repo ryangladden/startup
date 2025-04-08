@@ -31,12 +31,9 @@ export default function Collaborators({webSocket}) {
 
     function removeActiveNotification(email) {
         console.log("REMOVING")
-        console.log(email);
-        console.log(activeNotifications);
         const newNotifications = activeNotifications.filter((user) => email !== user);
         console.log(newNotifications);
         addActiveNotification(newNotifications);
-        console.log("REMOVED");
     }
 
     React.useEffect(() => {
