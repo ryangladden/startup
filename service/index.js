@@ -173,6 +173,19 @@ apiRouter.get("/share/collaborators/messages", db.authenticated, db.requireAuth,
     res.send(messages);
 })
 
+apiRouter.post("/share/post", db.authenticated, db.requireAuth, async (req, res) => {
+    const {document_id, text} = req.body;
+    console.log(document_id);
+    const post = await db.createPost(req.user.user_id, document_id, text);
+    console.log(post);
+    res.send("received");
+})
+
+apiRouter.get("/share/posts", db.authenticated, db.requireAuth, async (req, res) => {
+    const posts = await db.getPosts(req.user.user_id);
+    res.send(posts);
+})
+
 const server = app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });

@@ -6,6 +6,20 @@ import ChatClient from './ChatClient';
 export function Sharing() {
 
     const [webSocket, configureWebSocket] = React.useState(new ChatClient())
+    const [posts, setPosts] = React.useState([])
+
+    React.useEffect(() => {
+        async function fetchData() {
+            const response = await fetch("/api/share/posts", {
+                method: "get"
+            })
+            const data = await response.json();
+            console.log(data);
+            setPosts(data);
+        }
+        fetchData();
+    }
+    , [])
 
     return (
     <main className='sharing'>

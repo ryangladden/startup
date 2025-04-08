@@ -13,6 +13,7 @@ const authCollection = db.collection('auth');
 const collabCollection = db.collection('collaborators');
 const collabRequestCollection = db.collection('collabRequests');
 const messageCollection = db.collection('messages');
+const collabPostCollection = db.collection('collabPosts');
 
 
 // User operations
@@ -320,6 +321,35 @@ async function getCollaborators(userId) {
   return null;
 }
 
+async function createPost(userId, docId, text) {
+  console.log(docId);
+  const post = {
+    user_id: userId,
+    document_id: new ObjectId(docId),
+    text: text
+  }
+  // console.log(post);
+  await collabPostCollection.insertOne(post);
+}
+  
+async function getPosts(userId) {
+  const self = await getUser("_id", userId);
+  const collaborators = await getCollaborators(userId);
+  collaborators.push(self);
+  console.log(collaborators);
+  const ids = collaborators.map((collaborator) => collaborator._id);
+  ids.push(userId);
+  const posts = await collabPostCollection.find({user_id: {$in: ids}}).toArray();
+  const documents = await docCollection.find({_id: {$in: posts.map((post) => post.document_id)}}).toArray();
+  for (const post of posts) {
+    post.document = documents.find((doc) => doc._id.equals(post.document_id));
+    const owner = collaborators.find((collab) => collab._id.equals(post.user_id))
+    delete owner.password;
+    post.owner = owner;
+  }
+  return posts;
+}
+
 // messages
 
 async function createChat(email1, email2) {
@@ -361,5 +391,7 @@ module.exports = {
   getUserRole,
   getDocOwner,
   addMessage,
-  getMessages
+  getMessages,
+  createPost,
+  getPosts,
 }
