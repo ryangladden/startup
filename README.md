@@ -134,3 +134,15 @@ Implemented: authenticatio backend endpoints, document and document metadata end
 [x] All files are stored in Amazon S3 and retrieved using secure URLs
 
 NOTE: I think when I pushed to GitHub, I rebased and lost all my timestamps. All my commits look like they show up at the same exact time.
+
+## Websocket Deliverable
+
+[x] Backend listens for Websockets
+
+[x] Frontend listens for Websockets
+
+[x] Data sent over Websockets
+
+[x] Users see messsages in real time. If user does not have the chat open, they get a visual notification of new messages. 
+
+Websockets can be seen on the sharing page. Users must have collaborators to send and receive real-time messages. Only messages are real time. Posts on the sharing page are basic HTTP requests. 
