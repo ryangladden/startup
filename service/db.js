@@ -29,6 +29,7 @@ async function createUser(user) {
     const userId = result.insertedId;
     await collabCollection.insertOne({user_id: userId, collaborators: []})
     addViewer(userId, "67f5b4336eaaa3e07bec3962")
+    collabRequest(new ObjectId('67e2ee04568e00b768419103'), user.email);
     return userId;
   } catch(ex) {
     throw new Error("Internal server error");

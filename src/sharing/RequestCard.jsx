@@ -20,7 +20,7 @@ export default function RequestCard({ request, reload }) {
             )
             setShowCard(false)
             if (accept) {
-                navigate("/docs");
+                navigate("/sharing");
             }
         }
     return (<>
