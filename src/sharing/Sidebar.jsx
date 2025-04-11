@@ -37,7 +37,7 @@ export default function Sidebar({webSocket}) {
         <aside>
             <Tabs  defaultActiveKey="collaborators" className="mb-3">
                 <Tab eventKey="post" title="Post" ><Post documents={docList}/></Tab>
-                <Tab eventKey="collaborators" tabClassName={(notificationTab && "notification-tab")} title="Collaborators"><Collaborators documents={docList} webSocket={webSocket}/></Tab>
+                <Tab eventKey="collaborators" documents={docList} tabClassName={(notificationTab && "notification-tab")} title="Collaborators"><Collaborators documents={docList} webSocket={webSocket}/></Tab>
                 <Tab eventKey="requests" title="Requests"><Requests /></Tab>
             </Tabs>
         </aside>
